@@ -31,7 +31,7 @@ public class PercolationStats {
             if (!p.isOpen(row, col))
                 p.open(row, col);
         }
-        return (float) p.numberOfOpenSites() / (n * n);
+        return (double) p.numberOfOpenSites() / (n * n);
     }
 
     // sample mean of percolation threshold
