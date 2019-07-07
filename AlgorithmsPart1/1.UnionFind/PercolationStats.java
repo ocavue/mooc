@@ -5,6 +5,8 @@ public class PercolationStats {
     private int n;
     private int trials;
     private double[] results;
+    private double mean;
+    private double stddev;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -34,12 +36,16 @@ public class PercolationStats {
 
     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(results);
+        if (mean == 0)
+            mean = StdStats.mean(results);
+        return mean;
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(results);
+        if (stddev == 0)
+            stddev = StdStats.stddev(results);
+        return stddev;
     }
 
     // low endpoint of 95% confidence interval
