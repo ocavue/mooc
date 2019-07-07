@@ -1,9 +1,9 @@
-import Percolation;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private int n;
+    private int trials;
     private double[] results;
 
     // perform independent trials on an n-by-n grid
@@ -12,16 +12,18 @@ public class PercolationStats {
             throw new IllegalArgumentException();
         }
 
-        results = new double[trials];
-        for (let i = 0; i < trials; i++) {
-            results[i] = experiment();
+        this.n = n;
+        this.trials = trials;
+        this.results = new double[trials];
+        for (int i = 0; i < trials; i++) {
+            this.results[i] = experiment();
         }
     }
 
     // Run one experiment and get estimate of the percolation
     private double experiment() {
-        Percolation p = new Percolation();
-        while (!percolates) {
+        Percolation p = new Percolation(n);
+        while (!p.percolates()) {
             int row = StdRandom.uniform(1, n + 1);
             int col = StdRandom.uniform(1, n + 1);
             p.open(row, col);
