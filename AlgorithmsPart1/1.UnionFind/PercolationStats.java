@@ -28,7 +28,7 @@ public class PercolationStats {
             int col = StdRandom.uniform(1, n + 1);
             p.open(row, col);
         }
-        return p.numberOfOpenSites() / (n * n);
+        return (float) p.numberOfOpenSites() / (n * n);
     }
 
     // sample mean of percolation threshold
