@@ -8,6 +8,7 @@ public class Percolation {
     private int n;
     private WeightedQuickUnionUF puf; // UF for check percolates
     private WeightedQuickUnionUF fuf; // UF for check full
+    private int opened ;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -36,7 +37,12 @@ public class Percolation {
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
+        if (isOpen(row, col)) {
+            return;
+        }
+
         sites[index(row, col)] = true;
+        opened += 1;
 
         if (row - 1 >= 1 && isOpen(row - 1, col)) {
             puf.union(index(row - 1, col), index(row, col));
@@ -76,13 +82,7 @@ public class Percolation {
 
     // returns the number of open sites
     public int numberOfOpenSites() {
-        int count = 0;
-        for (int i = 0; i < sites.length; i++) {
-            if (sites[i]) {
-                count += 1;
-            }
-        }
-        return count;
+        return opened;
     }
 
     // does the system percolate?
