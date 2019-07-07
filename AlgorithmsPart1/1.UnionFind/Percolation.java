@@ -64,7 +64,7 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        return uf.connected(index(row, col), top);
+        return isOpen(row, col) && uf.connected(index(row, col), top);
     }
 
     // returns the number of open sites
@@ -87,21 +87,26 @@ public class Percolation {
     public static void main(String[] args) {
         Percolation p = new Percolation(5);
         StdOut.println(!p.percolates());
+
+        StdOut.println(!p.isFull(1, 1));
+        p.open(1, 1);
+        StdOut.println(p.isFull(1, 1));
+
         p.open(5, 5);
         StdOut.println(!p.percolates());
         StdOut.println(p.isOpen(5, 5));
         StdOut.println(!p.isOpen(4, 5));
-        StdOut.println(p.numberOfOpenSites() == 1);
+        StdOut.println(p.numberOfOpenSites() == 2);
         p.open(4, 5);
         StdOut.println(!p.isOpen(1, 5));
         StdOut.println(p.isOpen(4, 5));
-        StdOut.println(p.numberOfOpenSites() == 2);
+        StdOut.println(p.numberOfOpenSites() == 3);
         p.open(1, 5);
         p.open(2, 5);
         p.open(3, 5);
         p.open(4, 5);
         p.open(5, 5);
-        StdOut.println(p.numberOfOpenSites() == 5);
+        StdOut.println(p.numberOfOpenSites() == 6);
         StdOut.println(p.percolates());
     }
 }
