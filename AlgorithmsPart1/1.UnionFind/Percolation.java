@@ -107,6 +107,10 @@ public class Percolation {
         StdOut.println(p.numberOfOpenSites() == 6);
         StdOut.println(p.percolates());
 
+        p.open(4, 2);
+        p.open(5, 2);
+        StdOut.println(!p.isFull(4,2));
+
         Percolation p1 = new Percolation(1);
         StdOut.println(!p1.percolates());
         p1.open(1, 1);
