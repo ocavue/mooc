@@ -10,6 +10,10 @@ public class Percolation {
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException();
+        }
+
         this.n = n;
         this.top = n * n;
         this.bottom = n * n + 1;
@@ -29,6 +33,9 @@ public class Percolation {
     }
 
     private int index(int row, int col) {
+        if (row < 1 || col < 1 || row > n || col > n) {
+            throw new IllegalArgumentException();
+        }
         return (row - 1) * n + (col - 1);
     }
 
