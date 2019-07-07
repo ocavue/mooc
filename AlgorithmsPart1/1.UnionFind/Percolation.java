@@ -23,13 +23,6 @@ public class Percolation {
         for (int i = 0; i < n * n; i++) {
             sites[i] = false;
         }
-
-        for (int col = 1; col <= n; col++) {
-            uf.union(index(1, col), top);
-        }
-        for (int col = 1; col <= n; col++) {
-            uf.union(index(n, col), bottom);
-        }
     }
 
     private int index(int row, int col) {
@@ -55,6 +48,11 @@ public class Percolation {
         if (col + 1 <= n && isOpen(row, col + 1)) {
             uf.union(index(row, col + 1), index(row, col));
         }
+
+        if (row == 1)
+            uf.union(index(row, col), top);
+        if (row == n)
+            uf.union(index(row, col), bottom);
     }
 
     // is the site (row, col) open?
@@ -64,7 +62,7 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        return isOpen(row, col) && uf.connected(index(row, col), top);
+        return uf.connected(index(row, col), top);
     }
 
     // returns the number of open sites
@@ -108,5 +106,10 @@ public class Percolation {
         p.open(5, 5);
         StdOut.println(p.numberOfOpenSites() == 6);
         StdOut.println(p.percolates());
+
+        Percolation p1 = new Percolation(1);
+        StdOut.println(!p1.percolates());
+        p1.open(1, 1);
+        StdOut.println(p1.percolates());
     }
 }
