@@ -6,8 +6,8 @@ public class Percolation {
     private int top;
     private int bottom;
     private int n;
-    private WeightedQuickUnionUF puf; // UF for check percolates
-    private WeightedQuickUnionUF fuf; // UF for check full
+    private WeightedQuickUnionUF puf; // UF for checking percolates
+    private WeightedQuickUnionUF fuf; // UF for checking full
     private int opened ;
 
     // creates n-by-n grid, with all sites initially blocked
