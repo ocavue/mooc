@@ -32,6 +32,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // add the item
     public void enqueue(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
         items[size] = item;
         size++;
         if (size >= items.length) {
@@ -41,6 +44,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // remove and return a random item
     public Item dequeue() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
         size--;
 
         // swip
@@ -58,6 +64,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return a random item (but do not remove it)
     public Item sample() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
         int index = StdRandom.uniform(size);
         return items[index];
     }
