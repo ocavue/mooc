@@ -25,7 +25,7 @@ public class Permutation {
             }
 
         }
-        for (int j = 0; j < k; ji++) {
+        for (int j = 0; j < k; j++) {
             StdOut.println(q.dequeue());
         }
     }
