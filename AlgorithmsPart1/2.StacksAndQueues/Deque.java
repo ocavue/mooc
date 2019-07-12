@@ -79,6 +79,9 @@ public class Deque<Item> implements Iterable<Item> {
         if (newFirst != null)
             newFirst.prev = null;
         first = newFirst;
+        if (size == 0) {
+            last = null;
+        }
         return oldFirst.item;
     }
 
@@ -93,6 +96,9 @@ public class Deque<Item> implements Iterable<Item> {
         if (newLast != null)
             newLast.next = null;
         last = newLast;
+        if (size == 0) {
+            first = null;
+        }
         return oldLast.item;
     }
 
@@ -153,6 +159,14 @@ public class Deque<Item> implements Iterable<Item> {
 
         assert d.isEmpty();
         assert d.size() == 0;
+
+        Deque<Integer> dd = new Deque<Integer>();
+        dd.addFirst(1);
+        assert dd.removeLast() == 1;
+        assert dd.first == null;
+        assert dd.last == null;
+        dd.addFirst(3);
+        assert dd.removeLast() == 3;
     }
 
 }
