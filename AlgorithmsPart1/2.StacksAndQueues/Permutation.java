@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdRandom;
 public class Permutation {
     // https://en.wikipedia.org/wiki/Reservoir_sampling
     public static void main(String[] args) {
-        int k = new Integer(args[0]);
+        int k = new Integer.valueOf(i); // https://stackoverflow.com/a/47095501
         int i = 0;
 
         RandomizedQueue<String> q = new RandomizedQueue<String>();
