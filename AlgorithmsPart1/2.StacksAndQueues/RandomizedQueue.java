@@ -49,12 +49,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         size--;
 
-        // swip
+        // swap
         Item last = items[size];
         int randomIndex = StdRandom.uniform(size + 1);
         Item randomItem = items[randomIndex];
 
         items[randomIndex] = last;
+        items[size] = null;
 
         if (size <= items.length / 4) {
             resize(items.length / 2);
@@ -127,6 +128,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (int i : q) {
             StdOut.println(i);
         }
+
+        StdOut.println(q.dequeue());
+        StdOut.println(q.dequeue());
+
+        assert q.size() == 0;
+        assert q.isEmpty();
     }
 
 }
