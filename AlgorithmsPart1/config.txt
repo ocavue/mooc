@@ -1,0 +1,2 @@
+https://algs4.cs.princeton.edu/code/
+Mac OS X (heavy handed). Download algs4.jar and put it in the folder /Users/username/Library/Java/Extensions/.
