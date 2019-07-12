@@ -4,5 +4,11 @@
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
+    },
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.executorMap": {
+        "java": "cd $dir ; javac-algs4 $fileName ; java-algs4 -ea $fileNameWithoutExt"
     }
 }
