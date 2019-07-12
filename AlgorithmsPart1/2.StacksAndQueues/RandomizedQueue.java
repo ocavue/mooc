@@ -51,7 +51,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         // swip
         Item last = items[size];
-        int randomIndex = StdRandom.uniform(size);
+        int randomIndex = StdRandom.uniform(size + 1);
         Item randomItem = items[randomIndex];
 
         items[randomIndex] = last;
