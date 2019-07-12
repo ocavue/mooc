@@ -17,7 +17,7 @@ public class Permutation {
             if (i <= k) {
                 q.enqueue(s);
             } else {
-                boolean keepNewItem = StdRandom.uniform() < (k / i);
+                boolean keepNewItem = StdRandom.uniform() < ((double)k / i);
                 if (keepNewItem) {
                     q.dequeue();
                     q.enqueue(s);
