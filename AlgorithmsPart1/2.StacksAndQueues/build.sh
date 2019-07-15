@@ -1,4 +1,5 @@
-cd `dirname $0`
+set -ex
+cd $(dirname $0)
 
 javac-algs4 Permutation.java
 java-algs4 -ea Permutation 3 < distinct.txt
