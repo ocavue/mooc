@@ -23,6 +23,7 @@ public class BruteCollinearPoints {
                         double slopeTo2 = testPoints[0].slopeTo(testPoints[2]);
                         double slopeTo3 = testPoints[0].slopeTo(testPoints[3]);
                         if (slopeTo1 == slopeTo2 && slopeTo2 == slopeTo3) {
+                            StdOut.println("xxxxxx");
                             addSegment(testPoints[0], testPoints[3]);
                         }
                     }
