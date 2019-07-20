@@ -38,6 +38,9 @@ public class BruteCollinearPoints {
 
     public LineSegment[] segments() {
         // the line segments
+        for (LineSegment s : segments) {
+            assert s != null;
+        }
         return segments;
     }
 
@@ -48,11 +51,6 @@ public class BruteCollinearPoints {
         for (int i = 0; i < segments.length; i++)
             newSegments[i] = segments[i];
         newSegments[segments.length] = segment;
-
-        for (LineSegment s : newSegments) {
-            assert s != null;
-        }
-
         this.segments = newSegments;
     }
 
