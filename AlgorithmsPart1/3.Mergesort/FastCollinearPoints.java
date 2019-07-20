@@ -22,10 +22,10 @@ public class FastCollinearPoints {
             int start = 0;
             int end = 0;
             while (end < rest.length) {
-                if ( end + 1 < rest.length && (root.slopeTo(rest[end + 1])) == root.slopeTo(rest[start]) ) {
+                if (end + 1 < rest.length && (root.slopeTo(rest[end + 1])) == root.slopeTo(rest[start])) {
                     end = end + 1;
                 } else {
-                    if ((start - end) >= 3) {
+                    if ((start - end) >= 3x) {
                         addSegment(root, rest[start]);
                     }
                     start = end + 1;
