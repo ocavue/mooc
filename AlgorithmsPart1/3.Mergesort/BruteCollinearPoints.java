@@ -23,7 +23,6 @@ public class BruteCollinearPoints {
                         double slopeTo2 = testPoints[0].slopeTo(testPoints[2]);
                         double slopeTo3 = testPoints[0].slopeTo(testPoints[3]);
                         if (slopeTo1 == slopeTo2 && slopeTo2 == slopeTo3) {
-                            assert 1 == 2;
                             addSegment(testPoints[0], testPoints[3]);
                         }
                     }
@@ -77,7 +76,7 @@ public class BruteCollinearPoints {
         StdDraw.show();
 
         // print and draw the line segments
-        FastCollinearPoints collinear = new FastCollinearPoints(points);
+        BruteCollinearPoints collinear = new BruteCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
             segment.draw();
