@@ -16,12 +16,13 @@ public class BruteCollinearPoints {
                 for (int c = b + 1; c + 1 < points.length; c++) {
                     for (int d = c + 1; d + 0 < points.length; d++) {
 
-                        double aSlopeToB = points[a].slopeTo(points[b]);
-                        double aSlopeToC = points[a].slopeTo(points[c]);
-                        double aSlopeToD = points[a].slopeTo(points[d]);
-                        if (aSlopeToB == aSlopeToC && aSlopeToB == aSlopeToD) {
-                            Point[] testPoints = new Point[] { points[a], points[b], points[c], points[d] };
-                            Arrays.sort(testPoints);
+                        Point[] testPoints = new Point[] { points[a], points[b], points[c], points[d] };
+                        Arrays.sort(testPoints);
+
+                        double slopeTo1 = testPoints[0].slopeTo(testPoints[1]);
+                        double slopeTo2 = testPoints[0].slopeTo(testPoints[2]);
+                        double slopeTo3 = testPoints[0].slopeTo(testPoints[3]);
+                        if (slopeTo1 == slopeTo2 && slopeTo2 == slopeTo3) {
                             assert 1 == 2;
                             addSegment(testPoints[0], testPoints[3]);
                         }
