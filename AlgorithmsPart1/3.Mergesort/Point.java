@@ -9,6 +9,7 @@
  *
  ******************************************************************************/
 
+import java.util.Arrays;
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -64,10 +65,10 @@ public class Point implements Comparable<Point> {
         if (that == null)
             throw new java.lang.IllegalArgumentException();
 
-        int x0 = this.x;
-        int y0 = this.y;
-        int x1 = that.x;
-        int y1 = that.y;
+        double x0 = this.x;
+        double y0 = this.y;
+        double x1 = that.x;
+        double y1 = that.y;
 
         if (y0 == y1 && x0 == x1)
             return Double.NEGATIVE_INFINITY;
@@ -150,5 +151,20 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
+        Point p0 = new Point(0, 0);
+        Point p1 = new Point(1, 1);
+        Point p2 = new Point(2, 2);
+        Point p3 = new Point(3, 3);
+
+        assert p1.slopeTo(p2) == 1;
+        assert p1.slopeTo(p3) == 1;
+        assert p2.slopeTo(p1) == 1;
+
+        Point[] ps = new Point[] { p3, p2, p0, p1 };
+        Arrays.sort(ps);
+        assert ps[0] == p0;
+        assert ps[1] == p1;
+        assert ps[2] == p2;
+        assert ps[3] == p3;
     }
 }
