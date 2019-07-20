@@ -65,10 +65,10 @@ public class Point implements Comparable<Point> {
         if (that == null)
             throw new java.lang.IllegalArgumentException();
 
-        double x0 = this.x;
-        double y0 = this.y;
-        double x1 = that.x;
-        double y1 = that.y;
+        int x0 = this.x;
+        int y0 = this.y;
+        int x1 = that.x;
+        int y1 = that.y;
 
         if (y0 == y1 && x0 == x1)
             return Double.NEGATIVE_INFINITY;
@@ -76,7 +76,7 @@ public class Point implements Comparable<Point> {
             return +0.0;
         if (x0 == x1)
             return Double.POSITIVE_INFINITY;
-        return (y1 - y0) / (x1 - x0);
+        return (double)(y1 - y0) / (x1 - x0);
     }
 
     /**
@@ -159,6 +159,10 @@ public class Point implements Comparable<Point> {
         assert p1.slopeTo(p2) == 1;
         assert p1.slopeTo(p3) == 1;
         assert p2.slopeTo(p1) == 1;
+
+        assert p0.slopeTo(new Point(1, 1)) == 1;
+        assert p0.slopeTo(new Point(1, 2)) == 2;
+        assert p0.slopeTo(new Point(2, 1)) == 0.5;
 
         Point[] ps = new Point[] { p3, p2, p0, p1 };
         Arrays.sort(ps);
