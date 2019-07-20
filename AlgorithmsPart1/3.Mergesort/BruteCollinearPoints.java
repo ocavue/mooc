@@ -22,7 +22,7 @@ public class BruteCollinearPoints {
                         if (aSlopeToB == aSlopeToC && aSlopeToB == aSlopeToD) {
                             Point[] testPoints = new Point[] { points[a], points[b], points[c], points[d] };
                             Arrays.sort(testPoints);
-
+                            assert 1 == 2;
                             addSegment(testPoints[0], testPoints[3]);
                         }
                     }
