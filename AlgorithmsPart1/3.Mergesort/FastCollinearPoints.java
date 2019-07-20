@@ -71,7 +71,7 @@ public class FastCollinearPoints {
         for (Point p : points) {
             p.draw();
         }
-        StdDraw.show();
+        // StdDraw.show();
 
         // print and draw the line segments
         FastCollinearPoints collinear = new FastCollinearPoints(points);
