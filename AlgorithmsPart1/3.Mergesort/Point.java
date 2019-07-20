@@ -60,6 +60,17 @@ public class Point implements Comparable<Point> {
      */
     public double slopeTo(Point that) {
         /* YOUR CODE HERE */
+        if (that == null) throw new java.lang.IllegalArgumentException();
+
+        int x0 = this.x;
+        int y0 = this.y;
+        int x1 = that.x;
+        int y1 = that.y;
+
+        if (y0 == y1 && x0 == x1) return Double.NEGATIVE_INFINITY;
+        if (y0 == y1) return +0.0;
+        if (x0 == x1) return Double.POSITIVE_INFINITY;
+        return (y1 - y0) / (x1 - x0);
     }
 
     /**
@@ -76,6 +87,18 @@ public class Point implements Comparable<Point> {
      */
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
+        if (that == null) throw new java.lang.IllegalArgumentException();
+
+        int x0 = this.x;
+        int y0 = this.y;
+        int x1 = that.x;
+        int y1 = that.y;
+
+        if (y0 < y1) return -1;
+        if (y0 > y1) return +1;
+        if (x0 < x1) return -1;
+        if (x0 > x1) return +1;
+        return 0;
     }
 
     /**
