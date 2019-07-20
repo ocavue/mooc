@@ -11,25 +11,34 @@ public class BruteCollinearPoints {
         if (points == null)
             throw new IllegalArgumentException();
 
+        Arrays.sort(points);
+        for (Point p : points) {
+            if (p == null)
+                throw new IllegalArgumentException();
+        }
+        for (int i = 1; i < points.length; i++) {
+            if (points[i - 1] == points[i])
+                throw new IllegalArgumentException();
+        }
+
         for (int a = 0 + 0; a + 3 < points.length; a++) {
             for (int b = a + 1; b + 2 < points.length; b++) {
                 for (int c = b + 1; c + 1 < points.length; c++) {
                     for (int d = c + 1; d + 0 < points.length; d++) {
-
-                        Point[] testPoints = new Point[] { points[a], points[b], points[c], points[d] };
-                        Arrays.sort(testPoints);
-
-                        double slopeTo1 = testPoints[0].slopeTo(testPoints[1]);
-                        double slopeTo2 = testPoints[0].slopeTo(testPoints[2]);
-                        double slopeTo3 = testPoints[0].slopeTo(testPoints[3]);
-                        if (slopeTo1 == slopeTo2 && slopeTo2 == slopeTo3) {
-                            StdOut.printf("xxxxxx %d %d %d %d %f %f %f \n", a, b, c, d, slopeTo1, slopeTo2, slopeTo3);
-                            addSegment(testPoints[0], testPoints[3]);
+                        if (isCollinear(points[a], points[b], points[c], points[d])) {
+                            addSegment(points[a], points[d]);
                         }
                     }
                 }
             }
         }
+    }
+
+    private boolean isCollinear(Point a, Point b, Point c, Point d) {
+        double sb = a.slopeTo(b);
+        double sc = a.slopeTo(c);
+        double sd = a.slopeTo(d);
+        return (sb == sc && sc == sd);
     }
 
     public int numberOfSegments() {
