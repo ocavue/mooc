@@ -50,7 +50,8 @@ public class BruteCollinearPoints {
             LineSegment[] newSegments = new LineSegment[segments.length + 1];
             for (int i = 0; i < segments.length; i++)
                 newSegments[i] = segments[i];
-            newSegments[segments.length] = this.segments = newSegments;
+            newSegments[segments.length] = segment;
+            this.segments = newSegments;
         }
     }
 
