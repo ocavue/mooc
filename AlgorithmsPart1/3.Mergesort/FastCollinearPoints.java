@@ -57,7 +57,7 @@ public class FastCollinearPoints {
 
         if ((end - start) < 2)
             return;
-        StdOut.printf("checkSegment %s %d %d \n", root, start, end);
+        // StdOut.printf("checkSegment %s %d %d \n", root, start, end);
         Point[] collinearPoints = new Point[end - start + 2];
         for (int i = start; i <= end; i++) {
             collinearPoints[i - start] = pointsOrderBySlope[i];
