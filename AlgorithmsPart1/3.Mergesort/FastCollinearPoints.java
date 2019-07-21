@@ -5,34 +5,41 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
 public class FastCollinearPoints {
-    private Point[][] segmentArgs = new Point[0][2];
+    private LineSegment[] segments = new LineSegment[0];
 
     public FastCollinearPoints(Point[] points) {
         // finds all line segments containing 4 or more points
         checkPoints(points);
-        for (int i = 0; i + 3 < points.length; i++) {
-            Point root = points[i];
 
-            Point[] rest = new Point[points.length - i - 1];
-            for (int j = i + 1; j < points.length; j++) {
-                rest[j - i - 1] = points[j];
-            }
-
-            Arrays.sort(rest, root.slopeOrder());
+        for (Point p : points) {
             int start = 0;
             int end = 0;
-            while (end < rest.length) {
-                if (end + 1 < rest.length && (root.slopeTo(rest[end + 1])) == root.slopeTo(rest[start])) {
+            double thisSlope = p.slopeTo(points[0]);
+            while (end < points.length) {
+                double nextSlope = p.slopeTo(points[end]);
+                if (thisSlope == nextSlope) {
                     end = end + 1;
                 } else {
-                    if ((start - end) >= 3x) {
-                        addSegment(root, rest[start]);
-                    }
+                    checkSegment(points, p, start, end);
                     start = end + 1;
-                    end = start;
+                    end = end + 1;
                 }
             }
         }
+    }
+
+    private void checkSegment(Point[] points, Point root, int start, int end) {
+        if ((end - start) < 3)
+            return;
+        Point[] collinearPoints = new Point[end - start + 2];
+        for (int i = start; i <= end; i++) {
+            collinearPoints[i - start] = points[i];
+        }
+        collinearPoints[collinearPoints.length - 1] = root;
+        Arrays.sort(collinearPoints);
+        if ((root.compareTo(collinearPoints[0])) != 0)
+            return;
+        addSegment(collinearPoints[0], collinearPoints[-1]);
     }
 
     private void checkPoints(Point[] points) {
@@ -57,60 +64,24 @@ public class FastCollinearPoints {
         return (sb == sc && sc == sd);
     }
 
-    private void addSegment(Point root, Point[] points) {
-        Point[] newPoints = new Point[points.length + 1];
-        for (int i = 0; i < points.length; i++) {
-            newPoints[i] = points[i];
-        }
-        newPoints[points.length] = root;
-        addSegment(newPoints);
+    private void addSegment(Point p, Point q) {
+        LineSegment segment = new LineSegment(p, q);
+
+        LineSegment[] newSegments = new LineSegment[segments.length + 1];
+        for (int i = 0; i < segments.length; i++)
+            newSegments[i] = segments[i];
+        newSegments[segments.length] = segment;
+        this.segments = newSegments;
     }
-
-    private void addSegment(Point[] points) {
-        assert points.length >= 1;
-        Arrays.sort(points);
-        Point start = points[0];
-        Point end = points[points.length - 1];
-        addSegment(start, end);
-    }
-
-    private void addSegment(Point a, Point b) {
-        assert a.compareTo(b) < 0;
-        for (Point[] pair : segmentArgs) {
-            assert pair.length == 2;
-            assert pair[0].compareTo(pair[1]) < 0;
-            if (pair[0].slopeTo(pair[1]) == a.slopeTo(b))
-                break;
-            if (pair[1].compareTo(b) == 0)
-                break;
-        }
-        Point[][] newSegmentArgs = new Point[2][segmentArgs.length + 1];
-        for (int i = 0; i < segmentArgs.length; i++) {
-            newSegmentArgs[i] = segmentArgs[i];
-        }
-        newSegmentArgs[segmentArgs.length][0] = a;
-        newSegmentArgs[segmentArgs.length][1] = b;
-        segmentArgs = newSegmentArgs;
-    }
-
-    // private void addSegment(Point p, Point q) {
-    // LineSegment segment = new LineSegment(p, q);
-
-    // LineSegment[] newSegments = new LineSegment[segments.length + 1];
-    // for (int i = 0; i < segments.length; i++)
-    // newSegments[i] = segments[i];
-    // newSegments[segments.length] = segment;
-    // this.segments = newSegments;
-    // }
 
     public int numberOfSegments() {
         // the number of line segments
-        return 0;
+        return segments.length;
     }
 
     public LineSegment[] segments() {
         // the line segments
-        return new LineSegment[1];
+        return segments;
     }
 
     public static void main(String[] args) {
