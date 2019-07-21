@@ -14,9 +14,7 @@ public class FastCollinearPoints {
         for (Point p : points) {
             int start = 0;
             int end = 0;
-            double thisSlope = p.slopeTo(points[0]);
             while (end < points.length) {
-                double nextSlope = p.slopeTo(points[end]);
                 if (p.slopeTo(points[start]) == p.slopeTo(points[end])) {
                     end = end + 1;
                 } else {
@@ -42,9 +40,8 @@ public class FastCollinearPoints {
         }
         collinearPoints[collinearPoints.length - 1] = root;
         Arrays.sort(collinearPoints);
-        if ((root.compareTo(collinearPoints[0])) != 0)
-            return;
-        addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
+        if ((root.compareTo(collinearPoints[0])) == 0)
+            addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
     }
 
     private void checkPoints(Point[] points) {
