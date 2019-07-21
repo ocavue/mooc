@@ -23,9 +23,14 @@ public class BruteCollinearPoints {
         }
     }
 
-    private Point[] checkPoints(Point[] points) {
-        if (points == null)
+    private Point[] checkPoints(Point[] originPoints) {
+        if (originPoints == null)
             throw new IllegalArgumentException();
+
+        Point[] points = new Point[originPoints.length];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = points[i];
+        }
 
         Arrays.sort(points);
         for (Point p : points) {
@@ -36,11 +41,8 @@ public class BruteCollinearPoints {
             if (points[i - 1] == points[i])
                 throw new IllegalArgumentException();
         }
-        Point[] newPoints = new Point[points.length];
-        for (int i = 0; i < points.length; i++) {
-            newPoints[i] = points[i];
-        }
-        return newPoints;
+
+        return points;
     };
 
     private boolean isCollinear(Point a, Point b, Point c, Point d) {
