@@ -106,8 +106,16 @@ public class FastCollinearPoints {
 
     private void addSegment(Point p, Point q) {
         LineSegment newSegment = new LineSegment(p, q);
+
+        if (segments.length == 0) {
+            segments = new LineSegment[] { newSegment };
+            numberOfSegments++;
+            return;
+        }
+
         LineSegment[] newSegments;
         if (numberOfSegments == segments.length) {
+            assert numberOfSegments >= 1;
             newSegments = new LineSegment[2 * numberOfSegments];
             for (int i = 0; i < numberOfSegments; i++) {
                 newSegments[i] = segments[i];
