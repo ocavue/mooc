@@ -39,7 +39,7 @@ public class FastCollinearPoints {
         Arrays.sort(collinearPoints);
         if ((root.compareTo(collinearPoints[0])) != 0)
             return;
-        addSegment(collinearPoints[0], collinearPoints[-1]);
+        addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
     }
 
     private void checkPoints(Point[] points) {
