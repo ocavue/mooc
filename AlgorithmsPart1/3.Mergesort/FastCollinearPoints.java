@@ -81,7 +81,7 @@ public class FastCollinearPoints {
         Arrays.sort(points);
         for (Point p : points) {
             if (p == null)
-                throw new NullPointerException();
+                throw new IllegalArgumentException();
         }
         for (int i = 1; i < points.length; i++) {
             if (points[i - 1].compareTo(points[i]) == 0)
