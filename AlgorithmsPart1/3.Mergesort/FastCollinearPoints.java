@@ -38,7 +38,7 @@ public class FastCollinearPoints {
             assert root.slopeTo(pointsOrderBySlope[i]) == root.slopeTo(pointsOrderBySlope[i + 1]);
         }
 
-        if ((end - start) < 3)
+        if ((end - start) < 2)
             return;
         // StdOut.println("checkSegment");
         Point[] collinearPoints = new Point[end - start + 2];
