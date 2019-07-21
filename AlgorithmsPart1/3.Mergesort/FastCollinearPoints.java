@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class FastCollinearPoints {
     private LineSegment[] segments = new LineSegment[0];
+    private int numberOfSegments = 0;
 
     public FastCollinearPoints(Point[] points) {
         // finds all line segments containing 4 or more points
@@ -104,14 +105,17 @@ public class FastCollinearPoints {
     }
 
     private void addSegment(Point p, Point q) {
-        // StdOut.println("addSegment");
-        LineSegment segment = new LineSegment(p, q);
-
-        LineSegment[] newSegments = new LineSegment[segments.length + 1];
-        for (int i = 0; i < segments.length; i++)
-            newSegments[i] = segments[i];
-        newSegments[segments.length] = segment;
-        this.segments = newSegments;
+        LineSegment newSegment = new LineSegment(p, q);
+        LineSegment[] newSegments;
+        if (numberOfSegments == segments.length) {
+            newSegments = new LineSegment[2 * numberOfSegments];
+            for (int i = 0; i < numberOfSegments; i++) {
+                newSegments[i] = segments[i];
+            }
+            this.segments = newSegments;
+        }
+        this.segments[numberOfSegments] = newSegment;
+        numberOfSegments++;
     }
 
     public int numberOfSegments() {
