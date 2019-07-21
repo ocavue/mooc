@@ -30,11 +30,13 @@ public class FastCollinearPoints {
             int j = 0;
 
             for (j = 0; j < SlopeOrderBySlope.length; j++) {
-                if (SlopeOrderBySlope[i] == SlopeOrderBySlope[j] && isLastCollinearPoint(SlopeOrderBySlope, p, i)) {
-                    checkSegment(pointsOrderBySlope, p, i, j);
+                if (SlopeOrderBySlope[i] == SlopeOrderBySlope[j]) {
+                    assert isFirstCollinearPoint(SlopeOrderBySlope, p, i);
+                    if (isLastCollinearPoint(SlopeOrderBySlope, p, j)) {
+                        checkSegment(pointsOrderBySlope, p, i, j);
+                    }
                 } else {
                     i = j;
-                    assert isFirstCollinearPoint(SlopeOrderBySlope, p, i);
                 }
             }
         }
