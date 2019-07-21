@@ -26,16 +26,15 @@ public class FastCollinearPoints {
                 SlopeOrderBySlope[i] = p.slopeTo(pointsOrderBySlope[i]);
             }
 
-            for (int i = 0; i < SlopeOrderBySlope.length - 1; i++) {
-                if (isFirstCollinearPoint(SlopeOrderBySlope, p, i)) {
-                    for (int j = i + 1; j < SlopeOrderBySlope.length; j++) {
-                        if (isLastCollinearPoint(SlopeOrderBySlope, p, j)) {
-                            if (SlopeOrderBySlope[i] == SlopeOrderBySlope[j]) {
-                                checkSegment(pointsOrderBySlope, p, i, j);
-                            }
-                            break;
-                        }
-                    }
+            int i = 0;
+            int j = 0;
+
+            for (j = 0; j < SlopeOrderBySlope.length; j++) {
+                if (SlopeOrderBySlope[i] == SlopeOrderBySlope[j] && isLastCollinearPoint(SlopeOrderBySlope, p, i)) {
+                    checkSegment(pointsOrderBySlope, p, i, j);
+                } else {
+                    i = j;
+                    assert isFirstCollinearPoint(SlopeOrderBySlope, p, i);
                 }
             }
         }
