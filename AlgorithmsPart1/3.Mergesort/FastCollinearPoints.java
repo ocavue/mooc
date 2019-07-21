@@ -17,18 +17,22 @@ public class FastCollinearPoints {
             double thisSlope = p.slopeTo(points[0]);
             while (end < points.length) {
                 double nextSlope = p.slopeTo(points[end]);
-                if (thisSlope == nextSlope) {
+                if (p.slopeTo(points[start]) == p.slopeTo(points[end])) {
                     end = end + 1;
                 } else {
-                    checkSegment(points, p, start, end);
-                    start = end + 1;
-                    end = end + 1;
+                    checkSegment(points, p, start, end - 1);
+                    start = end;
+                    // end = end + 1;
                 }
             }
         }
     }
 
     private void checkSegment(Point[] points, Point root, int start, int end) {
+        for (int i = start; i < end; i++) {
+            assert root.slopeTo(points[i]) == root.slopeTo(points[i + 1]);
+        }
+
         if ((end - start) < 3)
             return;
         Point[] collinearPoints = new Point[end - start + 2];
