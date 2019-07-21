@@ -14,11 +14,18 @@ public class FastCollinearPoints {
         for (Point p : points) {
             int start = 0;
             int end = 0;
-            while (end < points.length) {
-                if (p.slopeTo(points[start]) == p.slopeTo(points[end])) {
+
+            Point[] pointsOrderBySlope = new Point[points.length];
+            for (int i = 0; i < points.length; i++) {
+                pointsOrderBySlope[i] = points[i];
+            }
+            Arrays.sort(pointsOrderBySlope, p.slopeOrder());
+
+            while (end < pointsOrderBySlope.length) {
+                if (p.slopeTo(pointsOrderBySlope[start]) == p.slopeTo(pointsOrderBySlope[end])) {
                     end = end + 1;
                 } else {
-                    checkSegment(points, p, start, end - 1);
+                    checkSegment(pointsOrderBySlope, p, start, end - 1);
                     start = end;
                     // end = end + 1;
                 }
@@ -26,9 +33,9 @@ public class FastCollinearPoints {
         }
     }
 
-    private void checkSegment(Point[] points, Point root, int start, int end) {
+    private void checkSegment(Point[] pointsOrderBySlope, Point root, int start, int end) {
         for (int i = start; i < end; i++) {
-            assert root.slopeTo(points[i]) == root.slopeTo(points[i + 1]);
+            assert root.slopeTo(pointsOrderBySlope[i]) == root.slopeTo(pointsOrderBySlope[i + 1]);
         }
 
         if ((end - start) < 2)
@@ -36,7 +43,7 @@ public class FastCollinearPoints {
         StdOut.println("checkSegment");
         Point[] collinearPoints = new Point[end - start + 2];
         for (int i = start; i <= end; i++) {
-            collinearPoints[i - start] = points[i];
+            collinearPoints[i - start] = pointsOrderBySlope[i];
         }
         collinearPoints[collinearPoints.length - 1] = root;
         Arrays.sort(collinearPoints);
