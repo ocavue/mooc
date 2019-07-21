@@ -21,16 +21,33 @@ public class FastCollinearPoints {
             }
             Arrays.sort(pointsOrderBySlope, p.slopeOrder());
 
-            while (end < pointsOrderBySlope.length) {
-                if (p.slopeTo(pointsOrderBySlope[start]) == p.slopeTo(pointsOrderBySlope[end])) {
-                    end = end + 1;
-                } else {
-                    checkSegment(pointsOrderBySlope, p, start, end - 1);
-                    start = end;
-                    // end = end + 1;
+            for (int i = 0; i < pointsOrderBySlope.length - 1; i++) {
+                if (isFirstCollinearPoint(pointsOrderBySlope, p, i)) {
+                    for (int j = i + 1; j < pointsOrderBySlope.length; j++) {
+                        if (isLastCollinearPoint(pointsOrderBySlope, p, j)) {
+                            if (p.slopeTo(pointsOrderBySlope[i]) == p.slopeTo(pointsOrderBySlope[j])) {
+                                checkSegment(pointsOrderBySlope, p, i, j);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private boolean isFirstCollinearPoint(Point[] pointsOrderBySlope, Point p, int index) {
+        if (index == 0)
+            return true;
+
+        return p.slopeTo(pointsOrderBySlope[index - 1]) != p.slopeTo(pointsOrderBySlope[index]);
+    }
+
+    private boolean isLastCollinearPoint(Point[] pointsOrderBySlope, Point p, int index) {
+        if (index == pointsOrderBySlope.length - 1)
+            return true;
+        return p.slopeTo(pointsOrderBySlope[index + 1]) != p.slopeTo(pointsOrderBySlope[index]);
+
     }
 
     private void checkSegment(Point[] pointsOrderBySlope, Point root, int start, int end) {
@@ -40,7 +57,7 @@ public class FastCollinearPoints {
 
         if ((end - start) < 2)
             return;
-        // StdOut.println("checkSegment");
+        StdOut.printf("checkSegment %s %d %d \n", root, start, end);
         Point[] collinearPoints = new Point[end - start + 2];
         for (int i = start; i <= end; i++) {
             collinearPoints[i - start] = pointsOrderBySlope[i];
@@ -104,31 +121,40 @@ public class FastCollinearPoints {
 
     public static void main(String[] args) {
 
-        // read the n points from a file
-        In in = new In(args[0]);
-        int n = in.readInt();
-        Point[] points = new Point[n];
-        for (int i = 0; i < n; i++) {
-            int x = in.readInt();
-            int y = in.readInt();
-            points[i] = new Point(x, y);
-        }
+        // // read the n points from a file
+        // In in = new In(args[0]);
+        // int n = in.readInt();
+        // Point[] points = new Point[n];
+        // for (int i = 0; i < n; i++) {
+        // int x = in.readInt();
+        // int y = in.readInt();
+        // points[i] = new Point(x, y);
+        // }
 
-        // draw the points
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
-        for (Point p : points) {
-            p.draw();
-        }
-        StdDraw.show();
+        // // draw the points
+        // StdDraw.enableDoubleBuffering();
+        // StdDraw.setXscale(0, 32768);
+        // StdDraw.setYscale(0, 32768);
+        // for (Point p : points) {
+        // p.draw();
+        // }
+        // StdDraw.show();
 
-        // print and draw the line segments
+        // // print and draw the line segments
+        // FastCollinearPoints collinear = new FastCollinearPoints(points);
+        // for (LineSegment segment : collinear.segments()) {
+        // StdOut.println(segment);
+        // segment.draw();
+        // }
+        // StdDraw.show();
+
+        Point[] points = new Point[] { new Point(0, 0), new Point(1, 1), new Point(2, 2), new Point(3, 3),
+                new Point(4, 4), new Point(1, -1), new Point(2, -2), new Point(3, -3), new Point(4, -4), };
+
         FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
-            segment.draw();
         }
-        StdDraw.show();
+
     }
 }
