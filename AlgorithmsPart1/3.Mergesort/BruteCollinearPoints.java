@@ -8,7 +8,7 @@ public class BruteCollinearPoints {
 
     public BruteCollinearPoints(Point[] points) {
         // finds all line segments containing 4 points
-        this.checkPoints(points);
+        points = this.checkPoints(points);
 
         for (int a = 0 + 0; a + 3 < points.length; a++) {
             for (int b = a + 1; b + 2 < points.length; b++) {
@@ -23,7 +23,7 @@ public class BruteCollinearPoints {
         }
     }
 
-    private void checkPoints(Point[] points) {
+    private Point[] checkPoints(Point[] points) {
         if (points == null)
             throw new IllegalArgumentException();
 
@@ -36,6 +36,11 @@ public class BruteCollinearPoints {
             if (points[i - 1] == points[i])
                 throw new IllegalArgumentException();
         }
+        Point[] newPoints = new Point[points.length];
+        for (int i = 0; i < points.length; i++) {
+            newPoints[i] = points[i];
+        }
+        return newPoints;
     };
 
     private boolean isCollinear(Point a, Point b, Point c, Point d) {

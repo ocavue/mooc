@@ -9,7 +9,7 @@ public class FastCollinearPoints {
 
     public FastCollinearPoints(Point[] points) {
         // finds all line segments containing 4 or more points
-        checkPoints(points);
+        points = checkPoints(points);
 
         for (Point p : points) {
             int start = 0;
@@ -51,7 +51,7 @@ public class FastCollinearPoints {
             addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
     }
 
-    private void checkPoints(Point[] points) {
+    private Point[] checkPoints(Point[] points) {
         if (points == null)
             throw new IllegalArgumentException();
 
@@ -64,6 +64,11 @@ public class FastCollinearPoints {
             if (points[i - 1] == points[i])
                 throw new IllegalArgumentException();
         }
+        Point[] newPoints = new Point[points.length];
+        for (int i = 0; i < points.length; i++) {
+            newPoints[i] = points[i];
+        }
+        return newPoints;
     };
 
     private boolean isCollinear(Point a, Point b, Point c, Point d) {
@@ -111,7 +116,7 @@ public class FastCollinearPoints {
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
         for (Point p : points) {
-        p.draw();
+            p.draw();
         }
         StdDraw.show();
 
