@@ -106,21 +106,21 @@ public class FastCollinearPoints {
             points[i] = new Point(x, y);
         }
 
-        // // draw the points
-        // StdDraw.enableDoubleBuffering();
-        // StdDraw.setXscale(0, 32768);
-        // StdDraw.setYscale(0, 32768);
-        // for (Point p : points) {
-        // p.draw();
-        // }
-        // StdDraw.show();
+        // draw the points
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setXscale(0, 32768);
+        StdDraw.setYscale(0, 32768);
+        for (Point p : points) {
+        p.draw();
+        }
+        StdDraw.show();
 
         // print and draw the line segments
         FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
-            // segment.draw();
+            segment.draw();
         }
-        // StdDraw.show();
+        StdDraw.show();
     }
 }
