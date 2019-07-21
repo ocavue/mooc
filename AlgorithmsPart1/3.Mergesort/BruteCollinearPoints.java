@@ -28,8 +28,8 @@ public class BruteCollinearPoints {
             throw new IllegalArgumentException();
 
         Point[] points = new Point[originPoints.length];
-        for (int i = 0; i < points.length; i++) {
-            points[i] = points[i];
+        for (int i = 0; i < originPoints.length; i++) {
+            points[i] = originPoints[i];
         }
 
         Arrays.sort(points);
