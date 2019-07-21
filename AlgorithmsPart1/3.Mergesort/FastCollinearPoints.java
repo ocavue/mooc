@@ -29,13 +29,13 @@ public class FastCollinearPoints {
     }
 
     private void checkSegment(Point[] points, Point root, int start, int end) {
-        StdOut.println("checkSegment");
         for (int i = start; i < end; i++) {
             assert root.slopeTo(points[i]) == root.slopeTo(points[i + 1]);
         }
 
         if ((end - start) < 3)
-            return;
+        return;
+        StdOut.println("checkSegment");
         Point[] collinearPoints = new Point[end - start + 2];
         for (int i = start; i <= end; i++) {
             collinearPoints[i - start] = points[i];
