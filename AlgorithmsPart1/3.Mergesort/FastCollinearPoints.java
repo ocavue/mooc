@@ -29,6 +29,7 @@ public class FastCollinearPoints {
     }
 
     private void checkSegment(Point[] points, Point root, int start, int end) {
+        StdOut.println("checkSegment");
         for (int i = start; i < end; i++) {
             assert root.slopeTo(points[i]) == root.slopeTo(points[i + 1]);
         }
@@ -69,7 +70,7 @@ public class FastCollinearPoints {
     }
 
     private void addSegment(Point p, Point q) {
-        StdOut.println("xx");
+        StdOut.println("addSegment");
         LineSegment segment = new LineSegment(p, q);
 
         LineSegment[] newSegments = new LineSegment[segments.length + 1];
