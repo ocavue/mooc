@@ -63,7 +63,7 @@ public class Point implements Comparable<Point> {
     public double slopeTo(Point that) {
         /* YOUR CODE HERE */
         if (that == null)
-            throw new java.lang.IllegalArgumentException();
+            throw new java.lang.NullPointerException();
 
         int x0 = this.x;
         int y0 = this.y;
@@ -93,7 +93,7 @@ public class Point implements Comparable<Point> {
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
         if (that == null)
-            throw new java.lang.IllegalArgumentException();
+            throw new java.lang.NullPointerException();
 
         int x0 = this.x;
         int y0 = this.y;
@@ -124,6 +124,8 @@ public class Point implements Comparable<Point> {
 
     private class ComparatorBySlope implements Comparator<Point> {
         public int compare(Point a, Point b) {
+            if (a == null || b == null) throw new NullPointerException();
+
             double slopeToA = Point.this.slopeTo(a);
             double slopeToB = Point.this.slopeTo(b);
             if (slopeToA < slopeToB)
