@@ -69,6 +69,7 @@ public class FastCollinearPoints {
     }
 
     private void addSegment(Point p, Point q) {
+        StdOut.println("xx");
         LineSegment segment = new LineSegment(p, q);
 
         LineSegment[] newSegments = new LineSegment[segments.length + 1];
