@@ -60,10 +60,12 @@ public class BruteCollinearPoints {
 
     public LineSegment[] segments() {
         // the line segments
-        for (LineSegment s : segments) {
-            assert s != null;
+        LineSegment[] mutableSegments = new LineSegment[segments.length];
+        for (int i = 0; i < segments.length; i++) {
+            assert segments[i] != null;
+            mutableSegments[i] = segments[i];
         }
-        return segments;
+        return mutableSegments;
     }
 
     private void addSegment(Point p, Point q) {

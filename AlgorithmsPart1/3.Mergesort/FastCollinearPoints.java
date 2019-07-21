@@ -116,7 +116,12 @@ public class FastCollinearPoints {
 
     public LineSegment[] segments() {
         // the line segments
-        return segments;
+        LineSegment[] mutableSegments = new LineSegment[segments.length];
+        for (int i = 0; i < segments.length; i++) {
+            assert segments[i] != null;
+            mutableSegments[i] = segments[i];
+        }
+        return mutableSegments;
     }
 
     public static void main(String[] args) {
@@ -126,9 +131,9 @@ public class FastCollinearPoints {
         int n = in.readInt();
         Point[] points = new Point[n];
         for (int i = 0; i < n; i++) {
-        int x = in.readInt();
-        int y = in.readInt();
-        points[i] = new Point(x, y);
+            int x = in.readInt();
+            int y = in.readInt();
+            points[i] = new Point(x, y);
         }
 
         // draw the points
@@ -136,20 +141,20 @@ public class FastCollinearPoints {
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
         for (Point p : points) {
-        p.draw();
+            p.draw();
         }
         StdDraw.show();
 
         // print and draw the line segments
         FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
-        StdOut.println(segment);
-        segment.draw();
+            StdOut.println(segment);
+            segment.draw();
         }
         StdDraw.show();
 
-        points = new Point[] { new Point(0, 0), new Point(1, 1), new Point(2, 2), new Point(3, 3),
-                new Point(4, 4), new Point(1, -1), new Point(2, -2), new Point(3, -3), new Point(4, -4), };
+        points = new Point[] { new Point(0, 0), new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4),
+                new Point(1, -1), new Point(2, -2), new Point(3, -3), new Point(4, -4), };
 
         collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
