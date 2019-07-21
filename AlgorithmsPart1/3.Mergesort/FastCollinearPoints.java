@@ -21,11 +21,16 @@ public class FastCollinearPoints {
             }
             Arrays.sort(pointsOrderBySlope, p.slopeOrder());
 
-            for (int i = 0; i < pointsOrderBySlope.length - 1; i++) {
-                if (isFirstCollinearPoint(pointsOrderBySlope, p, i)) {
-                    for (int j = i + 1; j < pointsOrderBySlope.length; j++) {
-                        if (isLastCollinearPoint(pointsOrderBySlope, p, j)) {
-                            if (p.slopeTo(pointsOrderBySlope[i]) == p.slopeTo(pointsOrderBySlope[j])) {
+            double[] SlopeOrderBySlope = new double[points.length];
+            for (int i = 0; i < points.length; i++) {
+                SlopeOrderBySlope[i] = p.slopeTo(pointsOrderBySlope[i]);
+            }
+
+            for (int i = 0; i < SlopeOrderBySlope.length - 1; i++) {
+                if (isFirstCollinearPoint(SlopeOrderBySlope, p, i)) {
+                    for (int j = i + 1; j < SlopeOrderBySlope.length; j++) {
+                        if (isLastCollinearPoint(SlopeOrderBySlope, p, j)) {
+                            if (SlopeOrderBySlope[i] == SlopeOrderBySlope[j]) {
                                 checkSegment(pointsOrderBySlope, p, i, j);
                             }
                             break;
@@ -36,18 +41,16 @@ public class FastCollinearPoints {
         }
     }
 
-    private boolean isFirstCollinearPoint(Point[] pointsOrderBySlope, Point p, int index) {
+    private boolean isFirstCollinearPoint(double[] SlopeOrderBySlope, Point p, int index) {
         if (index == 0)
             return true;
-
-        return p.slopeTo(pointsOrderBySlope[index - 1]) != p.slopeTo(pointsOrderBySlope[index]);
+        return SlopeOrderBySlope[index - 1] != SlopeOrderBySlope[index];
     }
 
-    private boolean isLastCollinearPoint(Point[] pointsOrderBySlope, Point p, int index) {
-        if (index == pointsOrderBySlope.length - 1)
+    private boolean isLastCollinearPoint(double[] SlopeOrderBySlope, Point p, int index) {
+        if (index == SlopeOrderBySlope.length - 1)
             return true;
-        return p.slopeTo(pointsOrderBySlope[index + 1]) != p.slopeTo(pointsOrderBySlope[index]);
-
+        return SlopeOrderBySlope[index + 1] != SlopeOrderBySlope[index];
     }
 
     private void checkSegment(Point[] pointsOrderBySlope, Point root, int start, int end) {
