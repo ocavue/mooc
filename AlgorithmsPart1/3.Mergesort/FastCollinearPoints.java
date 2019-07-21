@@ -36,6 +36,7 @@ public class FastCollinearPoints {
                         checkSegment(pointsOrderBySlope, p, i, j);
                     }
                 } else {
+                    assert isFirstCollinearPoint(SlopeOrderBySlope, p, i);
                     i = j;
                 }
             }
