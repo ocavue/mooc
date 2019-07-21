@@ -40,7 +40,7 @@ public class FastCollinearPoints {
 
         if ((end - start) < 2)
             return;
-        StdOut.println("checkSegment");
+        // StdOut.println("checkSegment");
         Point[] collinearPoints = new Point[end - start + 2];
         for (int i = start; i <= end; i++) {
             collinearPoints[i - start] = pointsOrderBySlope[i];
@@ -74,7 +74,7 @@ public class FastCollinearPoints {
     }
 
     private void addSegment(Point p, Point q) {
-        StdOut.println("addSegment");
+        // StdOut.println("addSegment");
         LineSegment segment = new LineSegment(p, q);
 
         LineSegment[] newSegments = new LineSegment[segments.length + 1];
