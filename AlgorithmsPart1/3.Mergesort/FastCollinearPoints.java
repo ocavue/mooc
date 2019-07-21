@@ -55,21 +55,22 @@ public class FastCollinearPoints {
     }
 
     private void checkSegment(Point[] pointsOrderBySlope, Point root, int start, int end) {
+        assert start <= end;
         for (int i = start; i < end; i++) {
             assert root.slopeTo(pointsOrderBySlope[i]) == root.slopeTo(pointsOrderBySlope[i + 1]);
+            assert pointsOrderBySlope[i].compareTo(pointsOrderBySlope[i + 1]) < 0;
         }
 
-        if ((end - start) < 3)
+        if (root.compareTo(pointsOrderBySlope[start]) >= 0)
             return;
-        // StdOut.printf("checkSegment %s %d %d \n", root, start, end);
-        Point[] collinearPoints = new Point[end - start + 2];
-        for (int i = start; i <= end; i++) {
-            collinearPoints[i - start] = pointsOrderBySlope[i];
-        }
-        collinearPoints[collinearPoints.length - 1] = root;
-        Arrays.sort(collinearPoints);
-        if ((root.compareTo(collinearPoints[0])) == 0)
-            addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
+
+        assert root.compareTo(pointsOrderBySlope[start]) < 0;
+        assert pointsOrderBySlope[start].compareTo(pointsOrderBySlope[end]) < 0;
+
+        if (end - start + 2 < 4)
+            return;
+
+        addSegment(root, pointsOrderBySlope[end]);
     }
 
     private Point[] checkPoints(Point[] originPoints) {
