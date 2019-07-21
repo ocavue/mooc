@@ -25,8 +25,9 @@ public class BruteCollinearPoints {
 
     private Point[] checkPoints(Point[] originPoints) {
         if (originPoints == null)
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
 
+        // data type should have no side effects unless documented in API
         Point[] points = new Point[originPoints.length];
         for (int i = 0; i < originPoints.length; i++) {
             points[i] = originPoints[i];
@@ -35,10 +36,10 @@ public class BruteCollinearPoints {
         Arrays.sort(points);
         for (Point p : points) {
             if (p == null)
-                throw new IllegalArgumentException();
+                throw new NullPointerException();
         }
         for (int i = 1; i < points.length; i++) {
-            if (points[i - 1] == points[i])
+            if (points[i - 1].compareTo(points[i]) == 0)
                 throw new IllegalArgumentException();
         }
 

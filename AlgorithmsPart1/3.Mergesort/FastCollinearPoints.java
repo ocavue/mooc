@@ -51,24 +51,27 @@ public class FastCollinearPoints {
             addSegment(collinearPoints[0], collinearPoints[collinearPoints.length - 1]);
     }
 
-    private Point[] checkPoints(Point[] points) {
-        if (points == null)
-            throw new IllegalArgumentException();
+    private Point[] checkPoints(Point[] originPoints) {
+        if (originPoints == null)
+            throw new NullPointerException();
+
+        // data type should have no side effects unless documented in API
+        Point[] points = new Point[originPoints.length];
+        for (int i = 0; i < originPoints.length; i++) {
+            points[i] = originPoints[i];
+        }
 
         Arrays.sort(points);
         for (Point p : points) {
             if (p == null)
-                throw new IllegalArgumentException();
+                throw new NullPointerException();
         }
         for (int i = 1; i < points.length; i++) {
-            if (points[i - 1] == points[i])
+            if (points[i - 1].compareTo(points[i]) == 0)
                 throw new IllegalArgumentException();
         }
-        Point[] newPoints = new Point[points.length];
-        for (int i = 0; i < points.length; i++) {
-            newPoints[i] = points[i];
-        }
-        return newPoints;
+
+        return points;
     };
 
     private boolean isCollinear(Point a, Point b, Point c, Point d) {
