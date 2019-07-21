@@ -133,7 +133,7 @@ public class FastCollinearPoints {
 
     public LineSegment[] segments() {
         // the line segments
-        LineSegment[] mutableSegments = new LineSegment[segments.length];
+        LineSegment[] mutableSegments = new LineSegment[numberOfSegments];
         for (int i = 0; i < numberOfSegments; i++) {
             assert segments[i] != null;
             mutableSegments[i] = segments[i];
