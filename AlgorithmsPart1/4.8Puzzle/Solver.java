@@ -28,12 +28,12 @@ public class Solver {
 
         while (!(thisMinNode.board.isGoal() || twinMinNode.board.isGoal())) {
             for (Board neighbor : thisMinNode.board.neighbors()) {
-                if (!neighbor.equals(thisMinNode.previous.board)) {
+                if (thisMinNode.previous == null || !neighbor.equals(thisMinNode.previous.board)) {
                     thisMQ.insert(new SearchNode(neighbor, thisMinNode.move + 1, thisMinNode));
                 }
             }
             for (Board neighbor : twinMinNode.board.neighbors()) {
-                if (!neighbor.equals(twinMinNode.previous.board)) {
+                if (twinMinNode.previous == null || !neighbor.equals(twinMinNode.previous.board)) {
                     twinMQ.insert(new SearchNode(neighbor, twinMinNode.move + 1, twinMinNode));
                 }
             }
@@ -141,8 +141,8 @@ public class Solver {
         int n = in.readInt();
         int[][] tiles = new int[n][n];
         for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-        tiles[i][j] = in.readInt();
+            for (int j = 0; j < n; j++)
+                tiles[i][j] = in.readInt();
         Board initial = new Board(tiles);
 
         // solve the puzzle
@@ -150,11 +150,11 @@ public class Solver {
 
         // print solution to standard output
         if (!solver.isSolvable())
-        StdOut.println("No solution possible");
+            StdOut.println("No solution possible");
         else {
-        StdOut.println("Minimum number of moves = " + solver.moves());
-        for (Board board : solver.solution())
-        StdOut.println(board);
+            StdOut.println("Minimum number of moves = " + solver.moves());
+            for (Board board : solver.solution())
+                StdOut.println(board);
         }
     }
 
