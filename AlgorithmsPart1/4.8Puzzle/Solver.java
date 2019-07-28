@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class Solver {
-    private MinPQ<SearchNode> thisMQ;
-    private MinPQ<SearchNode> twinMQ;
     private boolean isSolvable;
     private SearchNode solvedNode;
 
@@ -16,8 +14,8 @@ public class Solver {
             throw new IllegalArgumentException();
 
         Comparator<SearchNode> comparator = new ComparatorByHammingPriority();
-        thisMQ = new MinPQ<SearchNode>(comparator);
-        twinMQ = new MinPQ<SearchNode>(comparator);
+        MinPQ<SearchNode> thisMQ = new MinPQ<SearchNode>(comparator);
+        MinPQ<SearchNode> twinMQ = new MinPQ<SearchNode>(comparator);
 
         thisMQ.insert(new SearchNode(initial, 0, null));
         twinMQ.insert(new SearchNode(initial.twin(), 0, null));
