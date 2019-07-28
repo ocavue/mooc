@@ -107,7 +107,7 @@ public class Solver {
         int currentIndex = 0;
 
         SolutionIterator() {
-            int length = 0;
+            int length = 1;
             SearchNode node = solvedNode;
             while (node.previous != null) {
                 length++;
