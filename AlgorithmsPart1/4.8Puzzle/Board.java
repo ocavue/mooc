@@ -8,9 +8,16 @@ public class Board {
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
-    public Board(int[][] tiles) {
-        this.tiles = tiles;
-        this.n = tiles.length;
+    public Board(int[][] inputTiles) {
+        n = inputTiles.length;
+
+        int[][] newTiles = new int[n][n];
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                newTiles[row][col] = inputTiles[row][col];
+            }
+        }
+        this.tiles = newTiles;
     }
 
     // string representation of this board
