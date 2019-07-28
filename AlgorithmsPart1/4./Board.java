@@ -11,9 +11,20 @@ public class Board {
         this.n = tiles.length;
     }
 
-    // // string representation of this board
-    // public String toString() {
-    // }
+    // string representation of this board
+    public String toString() {
+        String s = "";
+        s += String.valueOf(n);
+        s += "\n";
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                s += " ";
+                s += String.valueOf(tiles[row][col]);
+            }
+            s += "\n";
+        }
+        return s;
+    }
 
     // board dimension n
     public int dimension() {
@@ -129,6 +140,8 @@ public class Board {
             { 7, 8, 0 },
         });
         // @formatter:on
+        StdOut.println(b3.toString());
+
         assert b3.dimension() == 3;
         assert b3.isGoal();
         assert b3.hamming() == 0;
