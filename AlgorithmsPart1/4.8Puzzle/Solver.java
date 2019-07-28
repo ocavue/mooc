@@ -120,6 +120,7 @@ public class Solver {
             boards = new Board[length];
 
             int index = length - 1;
+            node = solvedNode;
             while (index >= 0) {
                 boards[index] = node.board;
                 node = node.previous;
