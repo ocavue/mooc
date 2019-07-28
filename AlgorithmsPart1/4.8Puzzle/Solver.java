@@ -113,6 +113,9 @@ public class Solver {
                 length++;
                 node = node.previous;
             }
+
+            StdOut.println(length);
+
             boards = new Board[length];
 
             int index = length - 1;
