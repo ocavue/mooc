@@ -153,29 +153,6 @@ public class Board {
 
         return Arrays.asList(neighbors);
     }
-    // return new NeighborsIterable();
-    // }
-
-    // private class NeighborsIterable implements Iterable<Board> {
-    // public Iterator<Board> iterator() {
-    // return new NeighborsIterator();
-    // }
-    // }
-
-    // private class NeighborsIterator implements Iterator<Board> {
-
-    // public boolean hasNext() {
-    // return false;
-    // };
-
-    // public Board next() {
-    // return Board.this;
-    // };
-
-    // public void remove() {
-    // throw new UnsupportedOperationException();
-    // };
-    // }
 
     // Return a new board that is obtained by exchanging (rowA, colA) and (rowB,
     // colB)
