@@ -4,7 +4,10 @@ import edu.princeton.cs.algs4.MinPQ;
 import java.util.Comparator;
 
 public class Solver {
-    private MinPQ<SearchNode> mq;
+    private MinPQ<SearchNode> thisMQ;
+    private MinPQ<SearchNode> twinMQ;
+    private boolean isSolvable;
+    private SearchNode solvedNode;
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
@@ -12,19 +15,36 @@ public class Solver {
             throw new IllegalArgumentException();
 
         Comparator<SearchNode> comparator = new ComparatorByHammingPriority();
-        mq = new MinPQ<SearchNode>(comparator);
+        thisMQ = new MinPQ<SearchNode>(comparator);
+        twinMQ = new MinPQ<SearchNode>(comparator);
 
-        mq.insert(new SearchNode(initial, 0, null));
-        SearchNode minNode;
-        minNode = mq.delMin();
+        thisMQ.insert(new SearchNode(initial, 0, null));
+        twinMQ.insert(new SearchNode(initial.twin(), 0, null));
 
-        while (!minNode.board.isGold()) {
-            for (Board neighbor : minNode.board.neighbors()) {
-                if (!neighbor.equals(inNode.previous.board)) {
-                    mq.insert(new SearchNode(neighbor, minNode.move + 1, minNode));
+        SearchNode thisMinNode, twinMinNode;
+        thisMinNode = thisMQ.delMin();
+        twinMinNode = twinMQ.delMin();
+
+        while (!(thisMinNode.board.isGoal() || twinMinNode.board.isGoal())) {
+            for (Board neighbor : thisMinNode.board.neighbors()) {
+                if (!neighbor.equals(thisMinNode.previous.board)) {
+                    thisMQ.insert(new SearchNode(neighbor, thisMinNode.move + 1, thisMinNode));
                 }
             }
-            minNode = mq.delMin();
+            for (Board neighbor : twinMinNode.board.neighbors()) {
+                if (!neighbor.equals(twinMinNode.previous.board)) {
+                    twinMQ.insert(new SearchNode(neighbor, twinMinNode.move + 1, twinMinNode));
+                }
+            }
+            thisMinNode = thisMQ.delMin();
+            twinMinNode = twinMQ.delMin();
+        }
+
+        if (thisMinNode.board.isGoal()) {
+            isSolvable = true;
+            solvedNode = thisMinNode;
+        } else {
+            isSolvable = false;
         }
     }
 
@@ -58,17 +78,60 @@ public class Solver {
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-        return false;
+        return isSolvable;
     }
 
     // min number of moves to solve initial board
     public int moves() {
-        return 0;
+        if (isSolvable) {
+            return solvedNode.move;
+        } else {
+            return -1;
+        }
     }
 
-    // // sequence of boards in a shortest solution
-    // public Iterable<Board> solution() {
-    // }
+    // sequence of boards in a shortest solution
+    public Iterable<Board> solution() {
+        return new SolutionIterable();
+    }
+
+    private class SolutionIterable implements Iterable<Board> {
+        public Iterator<Board> iterator() {
+            return new SolutionIterator();
+        }
+    }
+
+    private class SolutionIterator implements Iterator<Board> {
+        Board[] boards;
+        int currentIndex = 0;
+
+        SolutionIterator() {
+            int length = 0;
+            SearchNode node = solvedNode;
+            while (node.previous != null) {
+                length++;
+                node = node.previous;
+            }
+            boards = new Board[length];
+
+            index = length - 1;
+            while (node.previous != null) {
+                boards[index] = node.board;
+                node = node.previous;
+                index--;
+            }
+        }
+
+        public boolean hasNext() {
+            return currentIndex <= boards.length - 1;
+        }
+
+        public Board next() {
+            Board next = boards[currentIndex];
+            currentIndex++;
+            return next;
+        }
+    }
 
     // test client (see below)
     public static void main(String[] args) {
