@@ -114,6 +114,7 @@ public class Solver {
                 node = node.previous;
             }
 
+            StdOut.println("xxxxx length");
             StdOut.println(length);
 
             boards = new Board[length];
