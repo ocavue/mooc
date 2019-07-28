@@ -105,9 +105,18 @@ public class Board {
     // public Iterable<Board> neighbors() {
     // }
 
-    // // a board that is obtained by exchanging any pair of tiles
-    // public Board twin() {
-    // }
+    // a board that is obtained by exchanging any pair of tiles
+    public Board twin() {
+        int[][] newTiles = new int[n][n];
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                newTiles[row][col] = tiles[row][col];
+            }
+        }
+        newTiles[0][0] = tiles[0][1];
+        newTiles[0][1] = tiles[0][0];
+        return new Board(newTiles);
+    }
 
     // unit testing (not graded)
     public static void main(String[] args) {
@@ -144,6 +153,19 @@ public class Board {
         assert b3.exceptCoordinate(7)[0] == 2 && b3.exceptCoordinate(7)[1] == 0;
         assert b3.exceptCoordinate(8)[0] == 2 && b3.exceptCoordinate(8)[1] == 1;
         assert b3.exceptCoordinate(0)[0] == 2 && b3.exceptCoordinate(0)[1] == 2;
+
+        // @formatter:off
+        assert b3.equals(new Board(new int[][]{
+            { 1, 2, 3 },
+            { 4, 5, 6 },
+            { 7, 8, 0 },
+        }));
+        assert !b3.equals(new Board(new int[][]{
+            { 0, 2, 3 },
+            { 4, 5, 6 },
+            { 7, 8, 1 },
+        }));
+        // @formatter:on
 
         // @formatter:off
         b3 = new Board(new int[][]{
