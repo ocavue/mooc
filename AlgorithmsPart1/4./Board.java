@@ -1,3 +1,5 @@
+import java.util.Iterator;
+import java.util.Arrays;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
@@ -112,21 +114,86 @@ public class Board {
         return true;
     }
 
-    // // all neighboring boards
-    // public Iterable<Board> neighbors() {
+    // all neighboring boards
+    public Iterable<Board> neighbors() {
+        int zeroRow = -1, zeroCol = -1;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                if (this.tiles[row][col] == 0) {
+                    zeroRow = row;
+                    zeroCol = col;
+                }
+            }
+        }
+
+        int length = 4;
+        if (zeroRow == 0 || zeroRow == n - 1)
+            length--;
+        if (zeroCol == 0 || zeroCol == n - 1)
+            length--;
+        int index = 0;
+
+        Board[] neighbors = new Board[length];
+
+        if (zeroRow != 0) {
+            neighbors[index] = exchange(zeroRow - 1, zeroCol, zeroRow, zeroCol);
+            index++;
+        }
+        if (zeroRow != n - 1) {
+            neighbors[index] = exchange(zeroRow + 1, zeroCol, zeroRow, zeroCol);
+            index++;
+        }
+        if (zeroCol != 0) {
+            neighbors[index] = exchange(zeroRow, zeroCol - 1, zeroRow, zeroCol);
+            index++;
+        }
+        if (zeroCol != n - 1) {
+            neighbors[index] = exchange(zeroRow, zeroCol + 1, zeroRow, zeroCol);
+        }
+
+        return Arrays.asList(neighbors);
+    }
+    // return new NeighborsIterable();
     // }
 
-    // a board that is obtained by exchanging any pair of tiles
-    public Board twin() {
+    // private class NeighborsIterable implements Iterable<Board> {
+    // public Iterator<Board> iterator() {
+    // return new NeighborsIterator();
+    // }
+    // }
+
+    // private class NeighborsIterator implements Iterator<Board> {
+
+    // public boolean hasNext() {
+    // return false;
+    // };
+
+    // public Board next() {
+    // return Board.this;
+    // };
+
+    // public void remove() {
+    // throw new UnsupportedOperationException();
+    // };
+    // }
+
+    // Return a new board that is obtained by exchanging (rowA, colA) and (rowB,
+    // colB)
+    private Board exchange(int rowA, int colA, int rowB, int colB) {
         int[][] newTiles = new int[n][n];
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 newTiles[row][col] = tiles[row][col];
             }
         }
-        newTiles[0][0] = tiles[0][1];
-        newTiles[0][1] = tiles[0][0];
+        newTiles[rowA][colA] = tiles[rowB][colB];
+        newTiles[rowB][colB] = tiles[rowA][colA];
         return new Board(newTiles);
+    }
+
+    // a board that is obtained by exchanging any pair of tiles
+    public Board twin() {
+        return exchange(0, 0, 0, 1);
     }
 
     // unit testing (not graded)
