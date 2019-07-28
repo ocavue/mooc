@@ -13,7 +13,7 @@ public class Solver {
         if (initial == null)
             throw new IllegalArgumentException();
 
-        Comparator<SearchNode> comparator = new ComparatorByHammingPriority();
+        Comparator<SearchNode> comparator = new ComparatorByManhattanPriority();
         MinPQ<SearchNode> thisMQ = new MinPQ<SearchNode>(comparator);
         MinPQ<SearchNode> twinMQ = new MinPQ<SearchNode>(comparator);
 
