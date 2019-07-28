@@ -170,7 +170,11 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        return exchange(0, 0, 0, 1);
+        if (tiles[0][0] == 0 || tiles[0][1] == 0) {
+            return exchange(1, 0, 1, 1);
+        } else {
+            return exchange(0, 0, 0, 1);
+        }
     }
 
     // unit testing (not graded)
