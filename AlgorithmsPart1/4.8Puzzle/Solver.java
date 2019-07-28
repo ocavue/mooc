@@ -53,6 +53,8 @@ public class Solver {
         public Board board;
         public int move;
         public SearchNode previous;
+        public int hamming;
+        public int manhattan;
 
         SearchNode(Board board, int move, SearchNode previous) {
             if (board == null)
@@ -61,19 +63,22 @@ public class Solver {
             this.board = board;
             this.move = move;
             this.previous = previous;
+
+            this.hamming = board.hamming();
+            this.manhattan = board.manhattan();
         }
 
     }
 
     private class ComparatorByHammingPriority implements Comparator<SearchNode> {
         public int compare(SearchNode a, SearchNode b) {
-            return (a.board.hamming() + a.move) - (b.board.hamming() + b.move);
+            return (a.hamming + a.move) - (b.hamming + b.move);
         }
     }
 
     private class ComparatorByManhattanPriority implements Comparator<SearchNode> {
         public int compare(SearchNode a, SearchNode b) {
-            return (a.board.manhattan() + a.move) - (b.board.manhattan() + b.move);
+            return (a.manhattan + a.move) - (b.manhattan + b.move);
         }
     }
 
