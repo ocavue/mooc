@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.SET;
 
 public class KdTree {
    private Integer size = 0;
@@ -23,18 +24,6 @@ public class KdTree {
          this.point = point;
          this.rect = rect;
          this.diecrtion = diecrtion;
-
-         if (diecrtion == vertical) {
-            RectHV left = new RectHV(rect.xmin(), rect.ymin(), point.x(), rect.ymax());
-            RectHV right = new RectHV(point.x(), rect.ymin(), rect.xmax(), rect.ymax());
-            lb = left;
-            rt = right;
-         } else {
-            RectHV bottom = new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), point.y());
-            RectHV top = new RectHV(rect.xmin(), point.y(), rect.xmax(), rect.ymax());
-            lb = bottom;
-            rt = top;
-         }
       }
 
       public RectHV lbRect() {
@@ -83,7 +72,7 @@ public class KdTree {
       return size;
    }
 
-   private Node getParent(Node root, Point p) {
+   private Node getParent(Node root, Point2D p) {
       assert root != null;
       assert root.rect.contains(p);
 
@@ -105,19 +94,16 @@ public class KdTree {
          throw new IllegalArgumentException();
 
       if (size == 0) {
-         root = new Node(p);
-         root.rect = new RectHV(0, 0, 1, 1);
-         root.diecrtion = vertical;
-         size = 1;
+         root = new Node(p, new RectHV(0, 0, 1, 1), vertical);
       } else {
          Node parent = getParent(root, p);
          assert parent.rect.contains(p);
 
          if (parent.lbRect().contains(p)) {
-            Node node = new Node(p, !parent.diecrtion, parent.lbRect());
+            Node node = new Node(p, parent.lbRect(), !parent.diecrtion);
             parent.lb = node;
          } else {
-            Node node = new Node(p, !parent.diecrtion, parent.rtRect());
+            Node node = new Node(p, parent.rtRect(), !parent.diecrtion);
             parent.rt = node;
          }
       }
@@ -169,36 +155,48 @@ public class KdTree {
       return set;
    }
 
-   private Point2D nearest(Node root, Point2D p, double bestDistance) {
+   private Point2D nearest(Point2D p, Node root, double bestDistance, Point2D bestPoint) {
+      assert root != null;
+
       double distance = root.point.distanceTo(p);
       if (distance <= bestDistance) {
          bestDistance = distance;
          bestPoint = root.point;
       }
 
-      double rtDistance = Double.MAX_VALUE;
-      double lbDistance = Double.MAX_VALUE;
+      // TODO organize the recursive method so that when there are two possible
+      // subtrees to go down, you always choose the subtree that is on the same side
+      // of the splitting line as the query point as the first subtree to explore—the
+      // closest point found while exploring the first subtree may enable pruning of
+      // the second subtree.
 
-      if (root.rt != null)
-         rtDistance = root.rt.rect.distanceTo(p);
-      if (root.lb != null)
-         lbDistance = root.lb.rect.distanceTo(p);
-
-      Node first;
-      Node second;
-
-      if (rtDistance < lbDistance) {
-         first = rtDistance;
-         second = lbDistance;
-      } else {
-         first = rtDistance;
-         second = lbDistance;
+      if (root.lb != null && root.lb.rect.distanceTo(p) < bestDistance) {
+         Point2D testPoint = nearest(p, root.lb, bestDistance, bestPoint);
+         assert testPoint.distanceTo(p) <= bestDistance;
+         bestPoint = testPoint;
+         bestDistance = bestPoint.distanceTo(p);
       }
 
+      if (root.rt != null && root.rt.rect.distanceTo(p) < bestDistance) {
+         Point2D testPoint = nearest(p, root.rt, bestDistance, bestPoint);
+         assert testPoint.distanceTo(p) <= bestDistance;
+         bestPoint = testPoint;
+         bestDistance = bestPoint.distanceTo(p);
+      }
+
+      assert bestPoint != null;
+      return bestPoint;
    }
 
    public Point2D nearest(Point2D p) {
       // a nearest neighbor in the set to point p; null if the set is empty
+      if (p == null)
+         throw new IllegalArgumentException();
+
+      if (root == null)
+         return null;
+
+      return nearest(p, root, root.point.distanceTo(p), root.point);
    }
 
    public static void main(String[] args) { // unit testing of the methods (optional)
