@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 public class KdTree {
    private Integer size = 0;
@@ -87,6 +88,10 @@ public class KdTree {
       assert root != null;
       assert root.rect.contains(p);
 
+      if (root.point.equals(p)) {
+         return root;
+      }
+
       Node rtParent = null, lbParent = null;
       if (root.rt != null && root.rt.rect.contains(p)) {
          rtParent = getParent(root.rt, p);
@@ -115,8 +120,10 @@ public class KdTree {
          root = new Node(p, new RectHV(0, 0, 1, 1), vertical);
       } else {
          Node parent = getParent(root, p);
-         if (parent.point.equals(p))
+         if (parent.point.equals(p)) {
+            // StdOut.println("skip");
             return;
+         }
 
          assert parent.rect.contains(p);
 
