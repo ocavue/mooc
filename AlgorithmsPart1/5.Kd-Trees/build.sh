@@ -4,8 +4,8 @@ cd $(dirname $0)
 javac-algs4 ./*.java
 
 java-algs4 KdTreeVisualizer
-java-algs4 NearestNeighborVisualizer ./input1K.txt
-java-algs4 RangeSearchVisualizer ./input1K.txt
+java-algs4 NearestNeighborVisualizer ./input10K.txt
+java-algs4 RangeSearchVisualizer ./input10K.txt
 
 mkdir -p ./output
 time=$(date +%Y-%m-%d_%H-%M-%S)
