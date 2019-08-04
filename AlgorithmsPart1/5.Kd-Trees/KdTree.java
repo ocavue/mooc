@@ -125,16 +125,29 @@ public class KdTree {
       size++;
    }
 
+   private boolean contains(Node root, Point2D p) {
+      // does the set contain point p?
+      if (root == null) {
+         return false;
+      }
+
+      if (!root.rect.contains(p)) {
+         return false;
+      }
+
+      if (root.point.compareTo(p) == 0) {
+         return true;
+      }
+
+      return contains(root.lb, p) || contains(root.rt, p);
+   }
+
    public boolean contains(Point2D p) {
       // does the set contain point p?
       if (p == null)
          throw new IllegalArgumentException();
 
-      if (root == null)
-         return false;
-
-      Node parent = getParent(root, p);
-      return parent.point.compareTo(p) == 0;
+      return contains(root, p);
    }
 
    public void draw() {
