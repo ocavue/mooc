@@ -83,12 +83,9 @@ public class KdTree {
    }
 
    private Node getParent(Node root, Point2D p) {
-      if (p == null)
-         throw new IllegalArgumentException();
-      if (root == null)
-         throw new IllegalArgumentException();
-      if (!root.rect.contains(p))
-         throw new IllegalArgumentException();
+      assert p != null;
+      assert root != null;
+      assert root.rect.contains(p);
 
       if (root.rt != null && root.rt.rect.contains(p))
          return getParent(root.rt, p);
@@ -135,7 +132,7 @@ public class KdTree {
          return false;
       }
 
-      if (root.point.compareTo(p) == 0) {
+      if (root.point.equals(p)) {
          return true;
       }
 
