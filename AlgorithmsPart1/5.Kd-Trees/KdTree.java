@@ -87,11 +87,22 @@ public class KdTree {
       assert root != null;
       assert root.rect.contains(p);
 
-      if (root.rt != null && root.rt.rect.contains(p))
-         return getParent(root.rt, p);
-      if (root.lb != null && root.lb.rect.contains(p))
-         return getParent(root.lb, p);
+      Node rtParent = null, lbParent = null;
+      if (root.rt != null && root.rt.rect.contains(p)) {
+         rtParent = getParent(root.rt, p);
+         if (rtParent.point.equals(p))
+            return rtParent;
+      }
+      if (root.lb != null && root.lb.rect.contains(p)) {
+         lbParent = getParent(root.lb, p);
+         if (lbParent.point.equals(p))
+            return lbParent;
+      }
 
+      if (rtParent != null)
+         return rtParent;
+      if (lbParent != null)
+         return lbParent;
       return root;
    }
 
@@ -100,13 +111,13 @@ public class KdTree {
       if (p == null)
          throw new IllegalArgumentException();
 
-      if (contains(p))
-         return;
-
       if (size == 0) {
          root = new Node(p, new RectHV(0, 0, 1, 1), vertical);
       } else {
          Node parent = getParent(root, p);
+         if (parent.point.equals(p))
+            return;
+
          assert parent.rect.contains(p);
 
          if (parent.lbRect().contains(p)) {
@@ -122,29 +133,23 @@ public class KdTree {
       size++;
    }
 
-   private boolean contains(Node root, Point2D p) {
-      // does the set contain point p?
-      if (root == null) {
-         return false;
-      }
-
-      if (!root.rect.contains(p)) {
-         return false;
-      }
-
-      if (root.point.equals(p)) {
-         return true;
-      }
-
-      return contains(root.lb, p) || contains(root.rt, p);
-   }
+   /*
+    * private boolean contains(Node root, Point2D p) { // does the set contain
+    * point p? if (root == null) { return false; }
+    *
+    * if (!root.rect.contains(p)) { return false; }
+    *
+    * if (root.point.equals(p)) { return true; }
+    *
+    * return contains(root.lb, p) || contains(root.rt, p); }
+    */
 
    public boolean contains(Point2D p) {
       // does the set contain point p?
       if (p == null)
          throw new IllegalArgumentException();
 
-      return contains(root, p);
+      return getParent(root, p).point.equals(p);
    }
 
    public void draw() {
