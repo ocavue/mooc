@@ -193,21 +193,32 @@ public class KdTree {
          bestPoint = root.point;
       }
 
-      // TODO organize the recursive method so that when there are two possible
+      // organize the recursive method so that when there are two possible
       // subtrees to go down, you always choose the subtree that is on the same side
       // of the splitting line as the query point as the first subtree to explore—the
       // closest point found while exploring the first subtree may enable pruning of
       // the second subtree.
 
-      if (root.lb != null && root.lb.rect.distanceTo(p) < bestDistance) {
-         Point2D testPoint = nearest(p, root.lb, bestDistance, bestPoint);
+      Node node1st, node2nd;
+      double lbDistance = root.lb == null ? Double.MAX_VALUE : root.lb.rect.distanceTo(p);
+      double rtDistance = root.rt == null ? Double.MAX_VALUE : root.rt.rect.distanceTo(p);
+      if (lbDistance < rtDistance) {
+         node1st = root.lb;
+         node2nd = root.rt;
+      } else {
+         node1st = root.rt;
+         node2nd = root.lb;
+      }
+
+      if (node1st != null && node1st.rect.distanceTo(p) < bestDistance) {
+         Point2D testPoint = nearest(p, node1st, bestDistance, bestPoint);
          assert testPoint.distanceTo(p) <= bestDistance;
          bestPoint = testPoint;
          bestDistance = bestPoint.distanceTo(p);
       }
 
-      if (root.rt != null && root.rt.rect.distanceTo(p) < bestDistance) {
-         Point2D testPoint = nearest(p, root.rt, bestDistance, bestPoint);
+      if (node2nd != null && node2nd.rect.distanceTo(p) < bestDistance) {
+         Point2D testPoint = nearest(p, node2nd, bestDistance, bestPoint);
          assert testPoint.distanceTo(p) <= bestDistance;
          bestPoint = testPoint;
          bestDistance = bestPoint.distanceTo(p);
