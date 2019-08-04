@@ -64,7 +64,7 @@ public class KdTree {
 
    public boolean isEmpty() {
       // is the set empty?
-      return true;
+      return size == 0;
    }
 
    public int size() {
@@ -107,6 +107,7 @@ public class KdTree {
             parent.rt = node;
          }
       }
+      size++;
    }
 
    public boolean contains(Point2D p) {
