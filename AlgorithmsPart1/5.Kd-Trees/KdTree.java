@@ -86,7 +86,7 @@ public class KdTree {
       assert root != null;
       assert root.rect.contains(p);
 
-      if (root.compareTo(p) == 0)
+      if (root.point.compareTo(p) == 0)
          return root;
 
       if (root.rt != null && root.rt.rect.contains(p))
