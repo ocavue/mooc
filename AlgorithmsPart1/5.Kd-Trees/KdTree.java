@@ -155,6 +155,8 @@ public class KdTree {
       // does the set contain point p?
       if (p == null)
          throw new IllegalArgumentException();
+      if (size == 0)
+         return false;
 
       return getParent(root, p).point.equals(p);
    }
