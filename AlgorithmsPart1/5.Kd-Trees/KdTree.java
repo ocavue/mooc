@@ -89,9 +89,13 @@ public class KdTree {
       if (root.point.compareTo(p) == 0)
          return root;
 
+      if (root.rt != null && root.rt.point.compareTo(p) == 0)
+         return root.rt;
+      if (root.lb != null && root.lb.point.compareTo(p) == 0)
+         return root.lb;
+
       if (root.rt != null && root.rt.rect.contains(p))
          return getParent(root.rt, p);
-
       if (root.lb != null && root.lb.rect.contains(p))
          return getParent(root.lb, p);
 
