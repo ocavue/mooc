@@ -1,6 +1,7 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
    private Integer size = 0;
@@ -54,6 +55,15 @@ public class KdTree {
 
       public void draw() {
          this.point.draw();
+
+         if (this.diecrtion == vertical) {
+            StdDraw.setPenColor(255, 0, 0);
+            StdDraw.line(this.point.x(), this.rect.ymin(), this.point.x(), this.rect.ymax());
+         } else {
+            StdDraw.setPenColor(0, 0, 255);
+            StdDraw.line(this.rect.xmin(), this.point.y(), this.rect.xmax(), this.point.y());
+         }
+
          if (this.lb != null)
             this.lb.draw();
          if (this.rt != null)
@@ -101,9 +111,11 @@ public class KdTree {
 
          if (parent.lbRect().contains(p)) {
             Node node = new Node(p, parent.lbRect(), !parent.diecrtion);
+            assert parent.lb == null;
             parent.lb = node;
          } else {
             Node node = new Node(p, parent.rtRect(), !parent.diecrtion);
+            assert parent.rt == null;
             parent.rt = node;
          }
       }
