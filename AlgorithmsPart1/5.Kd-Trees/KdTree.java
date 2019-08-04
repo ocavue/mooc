@@ -103,6 +103,9 @@ public class KdTree {
       if (p == null)
          throw new IllegalArgumentException();
 
+      if (contains(p))
+         return;
+
       if (size == 0) {
          root = new Node(p, new RectHV(0, 0, 1, 1), vertical);
       } else {
