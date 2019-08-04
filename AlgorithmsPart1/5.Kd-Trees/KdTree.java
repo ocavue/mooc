@@ -76,13 +76,13 @@ public class KdTree {
       assert root != null;
       assert root.rect.contains(p);
 
-      if (root.rt.rect != null && root.lb.rect != null && root.rt.rect.contains(p) && root.lb.rect.contains(p))
+      if (root.rt != null && root.lb != null && root.rt.rect.contains(p) && root.lb.rect.contains(p))
          return root;
 
-      if (root.rt.rect != null && root.rt.rect.contains(p))
+      if (root.rt != null && root.rt.rect.contains(p))
          return getParent(root.rt, p);
 
-      if (root.lb.rect != null && root.lb.rect.contains(p))
+      if (root.lb != null && root.lb.rect.contains(p))
          return getParent(root.lb, p);
 
       return root;
