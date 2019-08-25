@@ -15,3 +15,14 @@ v -> w: v is a hyponym of w
 
 rooted DAG: acyclic and has one root
 WordNet digraph is rooted DAG;
+
+
+synsets.txt：
+- 每行一个 synset；
+- 每行有三个字段（用逗号分隔）
+    - ID
+    - 所有同义词，用空格区分
+    - 字典中的定义，我们不关心
+
+hypernyms.txt：
+标记每个 synset 的 hypernym[s]
