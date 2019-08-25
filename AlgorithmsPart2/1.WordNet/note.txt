@@ -1,0 +1,17 @@
+synset: A set of synonyms 同义词
+
+hyponym: A more specific synset 下义词
+hypernym: A more general synset 上义词
+
+a synset can have more than one hypernym
+
+is-a: A relationship, hyponym => hypernym
+
+v -> w: v is a hyponym of w
+    For example:
+    v = { damage, harm };
+    w = { change, alteration, modification };
+    v -> w
+
+rooted DAG: acyclic and has one root
+WordNet digraph is rooted DAG;
