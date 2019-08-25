@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.SET;
 
 // All methods (and the constructor) should take time at most proportional to E + V in the worst case, where E and V are the number of edges and vertices in the digraph, respectively. Your data type should use space proportional to E + V.
 
@@ -97,7 +98,6 @@ public class SAP {
         // Stop if hit another source's mark and return the index;
         // Return -1 if not.
         private int bfs(Digraph G, Iterable<Integer> sources, int mark, int[] distTo, int[] edgeTo) {
-            Queue<Integer> q = new Queue<Integer>();
             for (int s : sources) {
                 if (marked[s] != 0) {
                     distTo[s] = 0;
@@ -105,6 +105,7 @@ public class SAP {
                 }
             }
 
+            Queue<Integer> q = new Queue<Integer>();
             for (int s : sources) {
                 assert marked[s] == 0;
                 marked[s] = mark;
@@ -229,23 +230,40 @@ public class SAP {
         Digraph G = new Digraph(in);
         SAP sap = new SAP(G);
 
-        for (Integer[] nums : new Integer[][] { { 3, 11, 4, 1 }, { 9, 12, 3, 5 }, { 7, 2, 4, 0 }, { 1, 6, -1, -1 } }) {
-            int v = nums[0];
-            int w = nums[1];
-            int expectedLength = nums[2];
-            int expectedAncestor = nums[3];
-            int length = sap.length(v, w);
-            int ancestor = sap.ancestor(v, w);
-            StdOut.printf("%d %d\n", v, w);
-            StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
+        if (args[0].equals("digraph1.txt")) {
+            for (Integer[] nums : new Integer[][] { { 3, 11, 4, 1 }, { 9, 12, 3, 5 }, { 7, 2, 4, 0 },
+                    { 1, 6, -1, -1 } }) {
+                int v = nums[0];
+                int w = nums[1];
+                int expectedLength = nums[2];
+                int expectedAncestor = nums[3];
+                int length = sap.length(v, w);
+                int ancestor = sap.ancestor(v, w);
+                StdOut.printf("%d %d\n", v, w);
+                StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
 
-            DoubleBFS bfs = sap.bfs(v, w);
-            if (bfs.ancestor() != -1) {
-                StdOut.printf("distToA = %d, distToB = %d\n", bfs.distToA(ancestor), bfs.distToB(ancestor));
+                DoubleBFS bfs = sap.bfs(v, w);
+                if (bfs.ancestor() != -1) {
+                    StdOut.printf("distToA = %d, distToB = %d\n", bfs.distToA(ancestor), bfs.distToB(ancestor));
+                }
+
+                assert length == expectedLength;
+                assert ancestor == expectedAncestor;
             }
-
-            assert length == expectedLength;
-            assert ancestor == expectedAncestor;
+        }
+        if (args[0].equals("digraph2.txt")) {
+            SET<Integer> A = new SET();
+            A.add(13);
+            A.add(23);
+            A.add(24);
+            SET<Integer> B = new SET();
+            B.add(6);
+            B.add(16);
+            B.add(17);
+            int length = sap.length(A, B);
+            int ancestor = sap.ancestor(A, B);
+            assert length == 4;
+            assert ancestor == 3;
         }
     }
 }
