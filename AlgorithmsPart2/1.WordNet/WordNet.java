@@ -7,7 +7,6 @@ import edu.princeton.cs.algs4.StdOut;
 // Throw a java.lang.IllegalArgumentException in the following situations:
 //      The input to the constructor does not correspond to a rooted DAG.
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class WordNet {
     private SET<String>[] synsets;
     private String[] synstrs;
