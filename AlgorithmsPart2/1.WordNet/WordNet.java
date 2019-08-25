@@ -57,9 +57,15 @@ public class WordNet {
     }
 
     // returns all WordNet nouns
-    // public Iterable<String> nouns() {
-    // return new String[] { "", "" };// TODO
-    // }
+    public Iterable<String> nouns() {
+        SET<String> nouns = new SET<String>();
+        for (SET<String> synset : synsets) {
+            for (String noun : synset) {
+                nouns.add(noun);
+            }
+        }
+        return nouns;
+    }
 
     // is the word a WordNet noun?
     // time: logarithmic in the number of nouns
@@ -88,6 +94,14 @@ public class WordNet {
 
     // do unit testing of this class
     public static void main(String[] args) {
-        WordNet net = new WordNet("synsets_small.txt", "");
+        WordNet net = new WordNet("synsets.txt", "hypernyms.txt");
+        Integer num = 0;
+        for (String noun : net.nouns()) {
+            StdOut.println(noun);
+            num++;
+            if (num > 10) {
+                break;
+            }
+        }
     }
 }
