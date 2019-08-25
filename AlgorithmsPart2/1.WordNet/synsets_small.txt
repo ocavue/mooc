@@ -1,0 +1,20 @@
+0,'hood,(slang) a neighborhood
+1,1530s,the decade from 1530 to 1539
+2,15_May_Organization,a terrorist organization formed in 1979 by a faction of the Popular Front for the Liberation of Palestine but disbanded in the 1980s when key members left to join a faction of al-Fatah
+3,1750s,the decade from 1750 to 1759
+4,1760s,the decade from 1760 to 1769
+5,1770s,the decade from 1770 to 1779
+6,1780s,the decade from 1780 to 1789
+7,1790s,the decade from 1790 to 1799
+8,18-karat_gold,an alloy that contains 75 per cent gold
+9,1820s,the decade from 1820 to 1829
+10,1830s,the decade from 1830 to 1839
+11,1840s,the decade from 1840 to 1849
+12,1850s,the decade from 1850 to 1859
+13,1860s,the decade from 1860 to 1869
+14,1870s,the decade from 1870 to 1879
+15,1900s,the decade from 1900 to 1909
+16,22-karat_gold,an alloy that contains 87 per cent gold
+17,24-karat_gold pure_gold,100 per cent gold
+18,24/7,uptime is 24 hours a day 7 days a week
+19,401-k_plan 401-k,a retirement savings plan that is funded by employee contributions and (often) matching contributions from the employer; contributions are made from your salary before taxes and the funds grow tax-free until they are withdrawn, at which point they can be converted into an IRA; funds can be transferred if you change employers and you can (to some extent) manage the investments yourself
