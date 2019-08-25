@@ -12,6 +12,7 @@ import edu.princeton.cs.algs4.StdOut;
 public class WordNet {
     Integer N; // the number of nouns
     SET<String>[] synsets;
+    String[] synstrs;
     Digraph digraph;
 
     // constructor takes the name of the two input files
@@ -22,15 +23,16 @@ public class WordNet {
             throw new IllegalArgumentException();
 
         // String[] hypernyms = (new In(hypernymsPath)).readAllStrings();
-        synsets = readSynsets(synsetsPath);
+        readSynsets(synsetsPath);
         digraph = new Digraph(synsets.length);
         addEdges(hypernymsPath, digraph);
 
     }
 
-    private SET<String>[] readSynsets(String synsetsPath) {
+    private void readSynsets(String synsetsPath) {
         String[] lines = (new In(synsetsPath)).readAllLines();
-        SET<String>[] synsets = new SET[lines.length];
+        this.synsets = new SET[lines.length];
+        this.synstrs = new String[lines.length];
         for (String line : lines) {
             String[] fileds = line.split(",");
             SET<String> synset = new SET<String>();
@@ -39,9 +41,9 @@ public class WordNet {
                 // StdOut.println(">"+noun+"<");
             }
             int index = Integer.parseInt(fileds[0]);
-            synsets[index] = synset;
+            this.synsets[index] = synset;
+            this.synstrs[index] = fileds[1];
         }
-        return synsets;
     }
 
     private void addEdges(String hypernymsPath, Digraph digraph) {
@@ -86,7 +88,10 @@ public class WordNet {
     public int distance(String nounA, String nounB) {
         if (nounA == null || nounB == null)
             throw new IllegalArgumentException();
-        return 0;// TODO
+        Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
+        Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
+        SAP sap = new SAP(digraph);
+        return sap.length(synidxAs, synidxBs);
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA
@@ -95,7 +100,27 @@ public class WordNet {
     public String sap(String nounA, String nounB) {
         if (nounA == null || nounB == null)
             throw new IllegalArgumentException();
-        return "";// TODO
+        Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
+        Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
+        SAP sap = new SAP(digraph);
+        Integer ancestor = sap.ancestor(synidxAs, synidxBs);
+        if (ancestor == -1) {
+            return null;
+        } else {
+            return synstrs[ancestor];
+        }
+    }
+
+    // Get all synset indexs that containe noun
+    private Iterable<Integer> synidxs(String noun) {
+        SET<Integer> synidxs = new SET();
+        for (int i = 0; i < synsets.length; i++) {
+            SET<String> synset = synsets[i];
+            if (synset.contains(noun)) {
+                synidxs.add(i);
+            }
+        }
+        return synidxs;
     }
 
     // do unit testing of this class

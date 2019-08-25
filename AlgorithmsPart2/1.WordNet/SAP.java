@@ -169,7 +169,6 @@ public class SAP {
     }
 
     Digraph G; // One-dimension Digraph
-    Digraph G2; // Two-dimension Digraph
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -237,7 +236,6 @@ public class SAP {
             if (bfs.ancestor() != -1) {
                 StdOut.printf("distToA = %d, distToB = %d\n", bfs.distToA(ancestor), bfs.distToB(ancestor));
             }
-
 
             assert length == expectedLength;
             assert ancestor == expectedAncestor;
