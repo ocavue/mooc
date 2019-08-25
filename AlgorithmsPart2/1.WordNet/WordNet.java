@@ -11,6 +11,8 @@ import edu.princeton.cs.algs4.StdOut;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class WordNet {
     Integer N; // the number of nouns
+    SET<String>[] synsets;
+    Digraph digraph;
 
     // constructor takes the name of the two input files
     // time: linearithmic
@@ -20,9 +22,10 @@ public class WordNet {
             throw new IllegalArgumentException();
 
         // String[] hypernyms = (new In(hypernymsPath)).readAllStrings();
-        SET<String>[] synsets = readSynsets(synsetsPath);
+        synsets = readSynsets(synsetsPath);
+        digraph = new Digraph(synsets.length);
+        addEdges(hypernymsPath, digraph);
 
-        // Digraph digraph = new Digraph(N);
     }
 
     private SET<String>[] readSynsets(String synsetsPath) {
@@ -38,6 +41,19 @@ public class WordNet {
             synsets[index] = synset;
         }
         return synsets;
+    }
+
+    private void addEdges(String hypernymsPath, Digraph digraph) {
+
+        String[] lines = (new In(hypernymsPath)).readAllLines();
+        for (String line : lines) {
+            String[] fileds = line.split(",");
+            Integer hyponymIdx = Integer.parseInt(fileds[0]);
+            for (int i = 1; i < fileds.length; i++) {
+                Integer hypernymIdx = Integer.parseInt(fileds[i]);
+                digraph.addEdge(hyponymIdx, hypernymIdx);
+            }
+        }
     }
 
     // returns all WordNet nouns
