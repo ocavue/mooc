@@ -257,8 +257,12 @@ public class SAP {
 
             assert sap.length(7, 9) == 2;
             assert sap.ancestor(7, 9) == 3;
+
             assert sap.length(22, 23) == 10;
             assert sap.ancestor(22, 23) == 0;
+
+            assert sap.length(13, 3) == 2;
+            assert sap.ancestor(13, 3) == 3;
         }
     }
 }
