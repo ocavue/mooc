@@ -45,9 +45,9 @@ public class SAP {
             int bestAncestor = -1;
 
             // if (G.V() < 100) {
-            //     for (int i = 0; i < G.V(); i++) {
-            //         StdOut.println(" " + i + " A " + markedA[i] + " B " + markedB[i]);
-            //     }
+            // for (int i = 0; i < G.V(); i++) {
+            // StdOut.println(" " + i + " A " + markedA[i] + " B " + markedB[i]);
+            // }
             // }
 
             for (int i = 0; i < G.V(); i++) {
@@ -172,8 +172,28 @@ public class SAP {
         }
     }
 
+    private void validateVertex(int v) {
+        int V = G.V();
+        if (v < 0 || v >= V)
+            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    }
+
+    private void validateVertex(Iterable<Integer> s) {
+        if (s == null) {
+            throw new IllegalArgumentException();
+        }
+        int V = G.V();
+        for (Integer v : s) {
+            if (v < 0 || v >= V)
+                throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+        }
+    }
+
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int a, int b) {
+        validateVertex(a);
+        validateVertex(b);
+
         DoubleBFS bfs = bfs(a, b);
         int ancestor = bfs.ancestor();
         if (ancestor == -1) {
@@ -190,6 +210,9 @@ public class SAP {
     // a common ancestor of v and w that participates in a shortest ancestral path;
     // -1 if no such path
     public int ancestor(int a, int b) {
+        validateVertex(a);
+        validateVertex(b);
+
         DoubleBFS bfs = bfs(a, b);
         return bfs.ancestor();
     }
@@ -197,6 +220,9 @@ public class SAP {
     // length of shortest ancestral path between any vertex in v and any vertex in
     // w; -1 if no such path
     public int length(Iterable<Integer> a, Iterable<Integer> b) {
+        validateVertex(a);
+        validateVertex(b);
+
         DoubleBFS bfs = new DoubleBFS(G, a, b);
         int ancestor = bfs.ancestor();
         if (ancestor == -1) {
@@ -209,6 +235,9 @@ public class SAP {
     // a common ancestor that participates in shortest ancestral path; -1 if no such
     // path
     public int ancestor(Iterable<Integer> a, Iterable<Integer> b) {
+        validateVertex(a);
+        validateVertex(b);
+
         DoubleBFS bfs = new DoubleBFS(G, a, b);
         return bfs.ancestor();
     }
