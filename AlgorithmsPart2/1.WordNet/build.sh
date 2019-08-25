@@ -5,7 +5,7 @@ cd $(dirname $0)
 
 javac-algs4 ./*.java
 
-java-algs4 WordNet
+java-algs4 -ea WordNet
 # java-algs4 SAP
 # java-algs4 Outcast
 

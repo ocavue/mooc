@@ -34,8 +34,9 @@ public class WordNet {
         for (String line : lines) {
             String[] fileds = line.split(",");
             SET<String> synset = new SET<String>();
-            for (String noun : fileds[1].split(" ")) {
+            for (String noun : fileds[1].split("\\s")) {
                 synset.add(noun);
+                // StdOut.println(">"+noun+"<");
             }
             int index = Integer.parseInt(fileds[0]);
             synsets[index] = synset;
@@ -72,7 +73,12 @@ public class WordNet {
     public boolean isNoun(String word) {
         if (word == null)
             throw new IllegalArgumentException();
-        return false;// TODO
+        for (String noun : nouns()) {
+            if (noun.equals(word)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // distance between nounA and nounB (defined below)
@@ -103,5 +109,7 @@ public class WordNet {
                 break;
             }
         }
+        assert net.isNoun("1780s");
+        assert !net.isNoun("THIS_WORD_DOES_NOT_EXIST");
     }
 }
