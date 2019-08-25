@@ -77,6 +77,8 @@ public class SAP {
                         continue;
                     } else {
                         // already marked by others, return
+                        edgeTo[w] = v;
+                        distTo[w] = distTo[v] + 1;
                         return w;
                     }
                 }
@@ -176,7 +178,7 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int a, int b) {
-        DoubleBFS bfs = new DoubleBFS(G, a, b);
+        DoubleBFS bfs = bfs(a, b);
         int ancestor = bfs.ancestor();
         if (ancestor == -1) {
             return -1;
@@ -185,10 +187,14 @@ public class SAP {
         }
     }
 
+    private DoubleBFS bfs(int a, int b) {
+        return new DoubleBFS(G, a, b);
+    }
+
     // a common ancestor of v and w that participates in a shortest ancestral path;
     // -1 if no such path
     public int ancestor(int a, int b) {
-        DoubleBFS bfs = new DoubleBFS(G, a, b);
+        DoubleBFS bfs = bfs(a, b);
         return bfs.ancestor();
     }
 
@@ -226,7 +232,14 @@ public class SAP {
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("%d %d\n", v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
-            // assert length == expectedLength;
+
+            DoubleBFS bfs = sap.bfs(v, w);
+            if (bfs.ancestor() != -1) {
+                StdOut.printf("distToA = %d, distToB = %d\n", bfs.distToA(ancestor), bfs.distToB(ancestor));
+            }
+
+
+            assert length == expectedLength;
             assert ancestor == expectedAncestor;
         }
     }
