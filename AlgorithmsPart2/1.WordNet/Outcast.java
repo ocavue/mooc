@@ -33,7 +33,14 @@ public class Outcast {
       for (int t = 2; t < args.length; t++) {
          In in = new In(args[t]);
          String[] nouns = in.readAllStrings();
-         StdOut.println(args[t] + ": " + outcast.outcast(nouns));
+         String out = outcast.outcast(nouns);
+         StdOut.println(args[t] + ": " + out);
+         if (t == 2)
+            assert out.equals("table");
+         if (t == 3)
+            assert out.equals("bed");
+         if (t == 4)
+            assert out.equals("potato");
       }
    }
 }
