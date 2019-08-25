@@ -13,7 +13,7 @@ public class WordNet {
     Integer N; // the number of nouns
     SET<String>[] synsets;
     String[] synstrs;
-    Digraph digraph;
+    Digraph G;
 
     // constructor takes the name of the two input files
     // time: linearithmic
@@ -24,8 +24,8 @@ public class WordNet {
 
         // String[] hypernyms = (new In(hypernymsPath)).readAllStrings();
         readSynsets(synsetsPath);
-        digraph = new Digraph(synsets.length);
-        addEdges(hypernymsPath, digraph);
+        G = new Digraph(synsets.length);
+        addEdges(hypernymsPath, G);
 
     }
 
@@ -90,7 +90,7 @@ public class WordNet {
             throw new IllegalArgumentException();
         Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
         Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
-        SAP sap = new SAP(digraph);
+        SAP sap = new SAP(G);
         return sap.length(synidxAs, synidxBs);
     }
 
@@ -102,7 +102,7 @@ public class WordNet {
             throw new IllegalArgumentException();
         Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
         Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
-        SAP sap = new SAP(digraph);
+        SAP sap = new SAP(G);
         Integer ancestor = sap.ancestor(synidxAs, synidxBs);
         if (ancestor == -1) {
             return null;
