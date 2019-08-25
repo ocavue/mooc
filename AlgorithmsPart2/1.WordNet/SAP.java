@@ -7,6 +7,13 @@ import edu.princeton.cs.algs4.StdOut;
 // All methods (and the constructor) should take time at most proportional to E + V in the worst case, where E and V are the number of edges and vertices in the digraph, respectively. Your data type should use space proportional to E + V.
 
 public class SAP {
+    private Digraph G;
+
+    // constructor takes a digraph (not necessarily a DAG)
+    public SAP(Digraph G) {
+        this.G = G;
+    }
+
     private class DoubleBFS {
         private static final int INFINITY = Integer.MAX_VALUE;
         // if marked[x] == A, then there is a path from a to x
@@ -166,13 +173,6 @@ public class SAP {
             if (v < 0 || v >= V)
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
         }
-    }
-
-    Digraph G; // One-dimension Digraph
-
-    // constructor takes a digraph (not necessarily a DAG)
-    public SAP(Digraph G) {
-        this.G = G;
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path

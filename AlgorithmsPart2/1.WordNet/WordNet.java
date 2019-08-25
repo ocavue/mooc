@@ -9,10 +9,9 @@ import edu.princeton.cs.algs4.StdOut;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class WordNet {
-    Integer N; // the number of nouns
-    SET<String>[] synsets;
-    String[] synstrs;
-    Digraph G;
+    private SET<String>[] synsets;
+    private String[] synstrs;
+    private Digraph G;
 
     // constructor takes the name of the two input files
     // time: linearithmic
