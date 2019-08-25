@@ -8,6 +8,7 @@ import edu.princeton.cs.algs4.StdOut;
 //      The input to the constructor does not correspond to a rooted DAG.
 //      Any of the noun arguments in distance() or sap() is not a WordNet noun.
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class WordNet {
     Integer N; // the number of nouns
 
