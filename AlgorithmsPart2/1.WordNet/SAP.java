@@ -99,6 +99,13 @@ public class SAP {
         private int bfs(Digraph G, Iterable<Integer> sources, int mark, int[] distTo, int[] edgeTo) {
             Queue<Integer> q = new Queue<Integer>();
             for (int s : sources) {
+                if (marked[s] != 0) {
+                    distTo[s] = 0;
+                    return s;
+                }
+            }
+
+            for (int s : sources) {
                 assert marked[s] == 0;
                 marked[s] = mark;
                 distTo[s] = 0;
