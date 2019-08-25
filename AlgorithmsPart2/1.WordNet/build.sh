@@ -2,15 +2,16 @@
 
 set -ex
 cd $(dirname $0)
+clear
 
 javac-algs4 ./*.java
 
 java-algs4 -ea WordNet
-# java-algs4 SAP
+java-algs4 -ea SAP digraph1.txt
 # java-algs4 Outcast
 
-# mkdir -p ./output
-# time=$(date +%Y-%m-%d_%H-%M-%S)
-# zip output/${time}.result.zip ./*.java
-# git add --all
-# git commit --allow-empty -m ${time}
+mkdir -p ./output
+time=$(date +%Y-%m-%d_%H-%M-%S)
+zip output/${time}.result.zip ./*.java
+git add --all
+git commit --allow-empty -m ${time}
