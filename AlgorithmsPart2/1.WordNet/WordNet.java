@@ -89,6 +89,8 @@ public class WordNet {
             throw new IllegalArgumentException();
         Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
         Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
+        if (nounA.equals(nounB))
+            return 0;
         SAP sap = new SAP(G);
         return sap.length(synidxAs, synidxBs);
     }
