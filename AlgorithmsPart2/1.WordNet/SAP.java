@@ -255,7 +255,6 @@ public class SAP {
             assert length == 4;
             assert ancestor == 3;
 
-
             assert sap.length(7, 9) == 2;
             assert sap.ancestor(7, 9) == 3;
         }
