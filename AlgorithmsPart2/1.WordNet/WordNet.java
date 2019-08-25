@@ -136,5 +136,8 @@ public class WordNet {
         }
         assert net.isNoun("1780s");
         assert !net.isNoun("THIS_WORD_DOES_NOT_EXIST");
+
+        StdOut.println(net.sap("harm", "jump"));
+        StdOut.println(net.distance("harm", "jump"));
     }
 }
