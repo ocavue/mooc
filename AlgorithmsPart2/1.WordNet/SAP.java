@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.In;
@@ -17,19 +19,15 @@ public class SAP {
 
     private class DoubleBFS {
         private static final int INFINITY = Integer.MAX_VALUE;
-        // if marked[x] == A, then there is a path from a to x
-        // if marked[x] == B, then there is a path from b to x
-        private int[] marked;
-        private int A = 1;
-        private int B = 2;
+        private boolean[] markedA;
+        private boolean[] markedB;
         private int[] edgeToA;
         private int[] distToA;
         private int[] edgeToB;
         private int[] distToB;
         private int ancestor; // Shortest ancestor, -1 if not exist
 
-        public DoubleBFS(Digraph G, int a, int b) {
-            assert a != b;
+        private void init(Digraph G) {
             distToA = new int[G.V()];
             edgeToA = new int[G.V()];
             distToB = new int[G.V()];
@@ -38,77 +36,77 @@ public class SAP {
                 distToA[v] = INFINITY;
                 distToB[v] = INFINITY;
             }
-            marked = new int[G.V()];
+            markedA = new boolean[G.V()];
+            markedB = new boolean[G.V()];
+        }
 
-            int hitA = bfs(G, a, A, distToA, edgeToA);
-            assert hitA == -1;
-            int hitB = bfs(G, b, B, distToB, edgeToB);
-            ancestor = hitB;
+        private void getAncestor() {
+            int bestDist = INFINITY;
+            int bestAncestor = -1;
+
+            if (G.V() < 100) {
+                for (int i = 0; i < G.V(); i++) {
+                    StdOut.println(" " + i + " A " + markedA[i] + " B " + markedB[i]);
+                }
+            }
+
+            for (int i = 0; i < G.V(); i++) {
+                if (markedA[i] && markedB[i]) {
+                    int dist = distToA[i] + distToB[i];
+                    if (dist < bestDist) {
+                        bestDist = dist;
+                        bestAncestor = i;
+                    }
+                }
+            }
+            ancestor = bestAncestor;
+        }
+
+        public DoubleBFS(Digraph G, int a, int b) {
+            assert a != b;
+            init(G);
+            bfs(G, a, distToA, edgeToA, markedA);
+            bfs(G, b, distToB, edgeToB, markedB);
+            getAncestor();
         }
 
         public DoubleBFS(Digraph G, Iterable<Integer> as, Iterable<Integer> bs) {
-            distToA = new int[G.V()];
-            edgeToA = new int[G.V()];
-            distToB = new int[G.V()];
-            edgeToB = new int[G.V()];
-            for (int v = 0; v < G.V(); v++) {
-                distToA[v] = INFINITY;
-                distToB[v] = INFINITY;
-            }
-            marked = new int[G.V()];
-
-            int hitA = bfs(G, as, A, distToA, edgeToA);
-            assert hitA == -1;
-            int hitB = bfs(G, bs, B, distToB, edgeToB);
-            ancestor = hitB;
+            init(G);
+            bfs(G, as, distToA, edgeToA, markedA);
+            bfs(G, bs, distToB, edgeToB, markedB);
+            getAncestor();
         }
 
         // BFS from single source.
         // Stop if hit another source's mark and return the index;
         // Return -1 if not.
-        private int bfs(Digraph G, int s, int mark, int[] distTo, int[] edgeTo) {
+        private void bfs(Digraph G, int s, int[] distTo, int[] edgeTo, boolean[] marked) {
             Queue<Integer> q = new Queue<Integer>();
-            marked[s] = mark;
+            marked[s] = true;
             distTo[s] = 0;
             q.enqueue(s);
 
             while (!q.isEmpty()) {
                 int v = q.dequeue();
                 for (int w : G.adj(v)) {
-                    if (marked[w] == 0) {
+                    if (!marked[w]) {
                         edgeTo[w] = v;
                         distTo[w] = distTo[v] + 1;
-                        marked[w] = mark;
+                        marked[w] = true;
                         q.enqueue(w);
-                    } else if (marked[w] == mark) {
-                        // already marked by s, skip
-                        continue;
-                    } else {
-                        // already marked by others, return
-                        edgeTo[w] = v;
-                        distTo[w] = distTo[v] + 1;
-                        return w;
                     }
                 }
             }
-            return -1;
         }
 
         // BFS from multiple sources
         // Stop if hit another source's mark and return the index;
         // Return -1 if not.
-        private int bfs(Digraph G, Iterable<Integer> sources, int mark, int[] distTo, int[] edgeTo) {
-            for (int s : sources) {
-                if (marked[s] != 0) {
-                    distTo[s] = 0;
-                    return s;
-                }
-            }
-
+        private void bfs(Digraph G, Iterable<Integer> sources, int[] distTo, int[] edgeTo, boolean[] marked) {
             Queue<Integer> q = new Queue<Integer>();
             for (int s : sources) {
-                assert marked[s] == 0;
-                marked[s] = mark;
+                assert marked[s] == false;
+                marked[s] = true;
                 distTo[s] = 0;
                 q.enqueue(s);
             }
@@ -116,23 +114,14 @@ public class SAP {
             while (!q.isEmpty()) {
                 int v = q.dequeue();
                 for (int w : G.adj(v)) {
-                    if (marked[w] == 0) {
+                    if (!marked[w]) {
                         edgeTo[w] = v;
                         distTo[w] = distTo[v] + 1;
-                        marked[w] = mark;
+                        marked[w] = true;
                         q.enqueue(w);
-                    } else if (marked[w] == mark) {
-                        // already marked by s, skip
-                        continue;
-                    } else {
-                        // already marked by others, return
-                        edgeTo[w] = v;
-                        distTo[w] = distTo[v] + 1;
-                        return w;
                     }
                 }
             }
-            return -1;
         }
 
         public int ancestor() {
@@ -177,7 +166,7 @@ public class SAP {
 
         // throw an IllegalArgumentException unless {@code 0 <= v < V}
         private void validateVertex(int v) {
-            int V = marked.length;
+            int V = markedA.length;
             if (v < 0 || v >= V)
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
         }
@@ -262,6 +251,7 @@ public class SAP {
             B.add(17);
             int length = sap.length(A, B);
             int ancestor = sap.ancestor(A, B);
+            StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
             assert length == 4;
             assert ancestor == 3;
         }
