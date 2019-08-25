@@ -11,7 +11,7 @@ public class Outcast {
 
    // given an array of WordNet nouns, return an outcast
    public String outcast(String[] nouns) {
-      Integer maxDistance = Integer.MAX_VALUE;
+      Integer maxDistance = -1;
       String maxString = null;
       for (int i = 0; i < nouns.length; i++) {
          Integer distance = 0;
