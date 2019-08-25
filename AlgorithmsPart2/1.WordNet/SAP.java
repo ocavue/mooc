@@ -184,6 +184,8 @@ public class SAP {
         }
         int V = G.V();
         for (Integer v : s) {
+            if (v == null)
+                throw new IllegalArgumentException();
             if (v < 0 || v >= V)
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
         }
