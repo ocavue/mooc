@@ -6,7 +6,6 @@ import edu.princeton.cs.algs4.StdOut;
 // TODO:
 // Throw a java.lang.IllegalArgumentException in the following situations:
 //      The input to the constructor does not correspond to a rooted DAG.
-//      Any of the noun arguments in distance() or sap() is not a WordNet noun.
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class WordNet {
@@ -119,6 +118,9 @@ public class WordNet {
             if (synset.contains(noun)) {
                 synidxs.add(i);
             }
+        }
+        if (synidxs.isEmpty()) {
+            throw new IllegalArgumentException();
         }
         return synidxs;
     }
