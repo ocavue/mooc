@@ -5,7 +5,8 @@ cd $(dirname $0)
 clear
 
 javac-algs4 -nowarn ./*.java
-clear
+# exit 0
+# clear
 
 java-algs4 -ea WordNet
 java-algs4 -ea SAP digraph1.txt

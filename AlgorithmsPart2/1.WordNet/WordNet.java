@@ -1,16 +1,16 @@
+import java.util.HashMap;
+
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.StdOut;
-
-// TODO:
-// Throw a java.lang.IllegalArgumentException in the following situations:
-//      The input to the constructor does not correspond to a rooted DAG.
+import edu.princeton.cs.algs4.Topological;
 
 public class WordNet {
-    private SET<String>[] synsets;
-    private String[] synstrs;
+    private String[] synsets;
+    private HashMap<String, SET<Integer>> synsMap;
     private Digraph G;
+    private SAP sap;
 
     // constructor takes the name of the two input files
     // time: linearithmic
@@ -20,27 +20,48 @@ public class WordNet {
             throw new IllegalArgumentException();
 
         // String[] hypernyms = (new In(hypernymsPath)).readAllStrings();
-        readSynsets(synsetsPath);
-        G = new Digraph(synsets.length);
+        synsMap = new HashMap<String, SET<Integer>>();
+        int size = readSynsets(synsetsPath);
+        G = new Digraph(size);
         addEdges(hypernymsPath, G);
-
+        validateRootedDGA(G);
+        sap = new SAP(G);
     }
 
-    private void readSynsets(String synsetsPath) {
+    private void validateRootedDGA(Digraph G) {
+        if (!(new Topological(G)).hasOrder()) {
+            throw new IllegalArgumentException("Not DGA");
+        }
+        int root = 0;
+        for (int i = 0; i < G.V(); i++) {
+            if (G.outdegree(i) == 0 && G.indegree(i) > 0) {
+                root++;
+            }
+        }
+        if (root != 1) {
+            throw new IllegalArgumentException("Not rooted");
+        }
+    }
+
+    private int readSynsets(String synsetsPath) {
         String[] lines = (new In(synsetsPath)).readAllLines();
-        this.synsets = new SET[lines.length];
-        this.synstrs = new String[lines.length];
+        this.synsets = new String[lines.length];
         for (String line : lines) {
             String[] fileds = line.split(",");
-            SET<String> synset = new SET<String>();
-            for (String noun : fileds[1].split("\\s")) {
-                synset.add(noun);
-                // StdOut.println(">"+noun+"<");
-            }
             int index = Integer.parseInt(fileds[0]);
-            this.synsets[index] = synset;
-            this.synstrs[index] = fileds[1];
+            for (String noun : fileds[1].split("\\s")) {
+                if (synsMap.containsKey(noun)) {
+                    SET<Integer> set = synsMap.get(noun);
+                    set.add(index);
+                } else {
+                    SET<Integer> set = new SET<Integer>();
+                    set.add(index);
+                    synsMap.put(noun, set);
+                }
+            }
+            this.synsets[index] = fileds[1];
         }
+        return lines.length;
     }
 
     private void addEdges(String hypernymsPath, Digraph digraph) {
@@ -58,26 +79,16 @@ public class WordNet {
 
     // returns all WordNet nouns
     public Iterable<String> nouns() {
-        SET<String> nouns = new SET<String>();
-        for (SET<String> synset : synsets) {
-            for (String noun : synset) {
-                nouns.add(noun);
-            }
-        }
-        return nouns;
+        return synsMap.keySet();
     }
 
     // is the word a WordNet noun?
     // time: logarithmic in the number of nouns
     public boolean isNoun(String word) {
-        if (word == null)
+        if (word == null) {
             throw new IllegalArgumentException();
-        for (String noun : nouns()) {
-            if (noun.equals(word)) {
-                return true;
-            }
         }
-        return false;
+        return synsMap.containsKey(word);
     }
 
     // distance between nounA and nounB (defined below)
@@ -89,7 +100,6 @@ public class WordNet {
         Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
         if (nounA.equals(nounB))
             return 0;
-        SAP sap = new SAP(G);
         return sap.length(synidxAs, synidxBs);
     }
 
@@ -101,28 +111,21 @@ public class WordNet {
             throw new IllegalArgumentException();
         Iterable<Integer> synidxAs = synidxs(nounA); // All synset indexs that containe nounA
         Iterable<Integer> synidxBs = synidxs(nounB); // All synset indexs that containe nounB
-        SAP sap = new SAP(G);
         Integer ancestor = sap.ancestor(synidxAs, synidxBs);
         if (ancestor == -1) {
             return null;
         } else {
-            return synstrs[ancestor];
+            return synsets[ancestor];
         }
     }
 
     // Get all synset indexs that containe noun
     private Iterable<Integer> synidxs(String noun) {
-        SET<Integer> synidxs = new SET();
-        for (int i = 0; i < synsets.length; i++) {
-            SET<String> synset = synsets[i];
-            if (synset.contains(noun)) {
-                synidxs.add(i);
-            }
-        }
-        if (synidxs.isEmpty()) {
+        if (synsMap.containsKey(noun)) {
+            return synsMap.get(noun);
+        } else {
             throw new IllegalArgumentException();
         }
-        return synidxs;
     }
 
     // do unit testing of this class

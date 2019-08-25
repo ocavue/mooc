@@ -272,11 +272,11 @@ public class SAP {
             }
         }
         if (args[0].equals("digraph2.txt")) {
-            SET<Integer> A = new SET();
+            SET<Integer> A = new SET<Integer>();
             A.add(13);
             A.add(23);
             A.add(24);
-            SET<Integer> B = new SET();
+            SET<Integer> B = new SET<Integer>();
             B.add(6);
             B.add(16);
             B.add(17);
