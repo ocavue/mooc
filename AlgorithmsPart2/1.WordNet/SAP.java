@@ -14,7 +14,7 @@ public class SAP {
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
-        this.G = Digraph.Digraph(G);
+        this.G = new Digraph(G);
     }
 
     private class DoubleBFS {
