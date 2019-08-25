@@ -44,11 +44,11 @@ public class SAP {
             int bestDist = INFINITY;
             int bestAncestor = -1;
 
-            if (G.V() < 100) {
-                for (int i = 0; i < G.V(); i++) {
-                    StdOut.println(" " + i + " A " + markedA[i] + " B " + markedB[i]);
-                }
-            }
+            // if (G.V() < 100) {
+            //     for (int i = 0; i < G.V(); i++) {
+            //         StdOut.println(" " + i + " A " + markedA[i] + " B " + markedB[i]);
+            //     }
+            // }
 
             for (int i = 0; i < G.V(); i++) {
                 if (markedA[i] && markedB[i]) {
