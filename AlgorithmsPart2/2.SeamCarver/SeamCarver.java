@@ -10,7 +10,7 @@ public class SeamCarver {
    public SeamCarver(Picture picture) {
       if (picture == null)
          throw new IllegalArgumentException();
-      pic = Picture(picture);
+      pic = new Picture(picture);
    }
 
    // current picture
@@ -52,6 +52,10 @@ public class SeamCarver {
       assert 0 <= x && x < width();
       assert 0 <= y && y < height();
       return (x / width()) + (y / height()) * width();
+   }
+
+   private int index2col(int digraphIndex) {
+      return digraphIndex / height();
    }
 
    private void addEdge(EdgeWeightedDigraph D, int fromX, int fromY, int toX, int toY) {
@@ -97,6 +101,7 @@ public class SeamCarver {
          x++;
       }
       assert validateSeam(seam, width(), height() - 1);
+      return seam;
    }
 
    // sequence of indices for vertical seam
@@ -109,7 +114,7 @@ public class SeamCarver {
       validateSeam(seam, width(), height() - 1);
       Picture pic = new Picture(width(), height() - 1);
       for (int x = 0; x < width(); x++) {
-         seamY = seam[x];
+         int seamY = seam[x];
          for (int y = 0; y <= height(); y++) {
             int newY;
             if (y < seamY)
@@ -129,13 +134,13 @@ public class SeamCarver {
       validateSeam(seam, height(), width() - 1);
       Picture pic = new Picture(width() - 1, height());
       for (int y = 0; y < height(); y++) {
-         seamX = seam[y];
+         int seamX = seam[y];
          for (int x = 0; x <= width(); x++) {
             int newX;
             if (x < seamX)
                newX = x;
             else if (x > seamX)
-               newX = x_aiff - 1;
+               newX = x - 1;
             else
                continue;
             pic.set(newX, y, this.pic.get(x, y));
@@ -147,7 +152,7 @@ public class SeamCarver {
    private boolean validateSeam(int[] seam, int seamLenght, int maxValue) {
       if (seam == null)
          throw new IllegalArgumentException();
-      if (length(sean) != seamLenght)
+      if (seam.length != seamLenght)
          throw new IllegalArgumentException();
       if (maxValue <= 1)
          throw new IllegalArgumentException();
