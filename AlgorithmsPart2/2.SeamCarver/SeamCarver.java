@@ -29,6 +29,20 @@ public class SeamCarver {
    public double energy(int x, int y) {
       if (x < 0 || x >= width() || y < 0 || y >= height())
          throw new IllegalArgumentException();
+
+      if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
+         return 1000;
+
+      // @formatter:off
+      int rx = pic.get(x - 1, y).getRed()   - pic.get(x + 1, y).getRed()   ;
+      int gx = pic.get(x - 1, y).getGreen() - pic.get(x + 1, y).getGreen() ;
+      int bx = pic.get(x - 1, y).getBlue()  - pic.get(x + 1, y).getBlue()  ;
+      int ry = pic.get(x, y - 1).getRed()   - pic.get(x, y + 1).getRed()   ;
+      int gy = pic.get(x, y - 1).getGreen() - pic.get(x, y + 1).getGreen() ;
+      int by = pic.get(x, y - 1).getBlue()  - pic.get(x, y + 1).getBlue()  ;
+      // @formatter:on
+
+      return Math.pow(rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by, 0.5);
    }
 
    // sequence of indices for horizontal seam
@@ -42,11 +56,41 @@ public class SeamCarver {
    // remove horizontal seam from current picture
    public void removeHorizontalSeam(int[] seam) {
       validateSeam(seam, width(), height() - 1);
+      Picture pic = new Picture(width(), height() - 1);
+      for (int x = 0; x < width(); x++) {
+         seamY = seam[x];
+         for (int y = 0; y <= height(); y++) {
+            int newY;
+            if (y < seamY)
+               newY = y;
+            else if (y > seamY)
+               newY = y - 1;
+            else
+               continue;
+            pic.set(x, newY, this.pic.get(x, y));
+         }
+      }
+      this.pic = pic;
    }
 
    // remove vertical seam from current picture
    public void removeVerticalSeam(int[] seam) {
       validateSeam(seam, height(), width() - 1);
+      Picture pic = new Picture(width() - 1, height());
+      for (int y = 0; y < height(); y++) {
+         seamX = seam[y];
+         for (int x = 0; x <= width(); x++) {
+            int newX;
+            if (x < seamX)
+               newX = x;
+            else if (x > seamX)
+               newX = x_aiff - 1;
+            else
+               continue;
+            pic.set(newX, y, this.pic.get(x, y));
+         }
+      }
+      this.pic = pic;
    }
 
    private void validateSeam(int[] seam, int seamLenght, int maxValue) {
