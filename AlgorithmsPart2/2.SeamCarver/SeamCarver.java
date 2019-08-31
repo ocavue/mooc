@@ -113,7 +113,35 @@ public class SeamCarver {
 
    // sequence of indices for vertical seam
    public int[] findVerticalSeam() {
-      return null; // TODO
+      // Build a EdgeWeightedDigraph
+      EdgeWeightedDigraph D = new EdgeWeightedDigraph(height() * width() + 2);
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y <= height(); y++) {
+            addEdge(D, x, y, x - 1, y + 1);
+            addEdge(D, x, y, x, y + 1);
+            addEdge(D, x, y, x + 1, y + 1);
+         }
+      }
+      final int virtualStart = height() * width();
+      final int virtualEnd = height() * width() + 1;
+      for (int x = 0; x < width(); x++) {
+         D.addEdge(new DirectedEdge(virtualStart, digraphIndex(x, 0), 0));
+         D.addEdge(new DirectedEdge(digraphIndex(x, height() - 1), virtualEnd, 0));
+      }
+
+      // Find the shortest path from virtualStart to virtualEnd
+      DijkstraSP sp = new DijkstraSP(D, virtualStart);
+      int y = -1;
+      int[] seam = new int[height()];
+      for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
+         if (0 <= y && y < height()) {
+            int fromX = index2x(edge.from());
+            seam[y] = fromX;
+         }
+         y++;
+      }
+      assert validateSeam(seam, height(), width() - 1);
+      return seam;
    }
 
    // remove horizontal seam from current picture
@@ -195,9 +223,9 @@ public class SeamCarver {
       assert s.digraphIndex(2, 1) == 5 && s.index2x(5) == 2 && s.index2y(5) == 1;
 
       int[] horizontalSeam = s.findHorizontalSeam();
+      int[] verticalSeam = s.findVerticalSeam();
       assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
       assert horizontalSeam[1] == 0;
       assert horizontalSeam[2] <= 1 || horizontalSeam[0] >= 0;
    }
-
 }
