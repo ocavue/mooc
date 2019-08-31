@@ -7,17 +7,25 @@ import edu.princeton.cs.algs4.DijkstraSP;
 
 public class SeamCarver {
    private Picture pic;
+   private double[] energies;
 
    // create a seam carver object based on the given picture
    public SeamCarver(Picture picture) {
       if (picture == null)
          throw new IllegalArgumentException();
       pic = new Picture(picture);
+      initEnergies();
+   }
+
+   private void initEnergies() {
+      energies = new double[pic.width() * pic.height()];
+      for (int i = 0; i < energies.length; i++)
+         energies[i] = -1;
    }
 
    // current picture
    public Picture picture() {
-      return pic;
+      return new Picture(pic);
    }
 
    // width of current picture
@@ -32,6 +40,14 @@ public class SeamCarver {
 
    // energy of pixel at column x and row y
    public double energy(int x, int y) {
+      int index = digraphIndex(x, y);
+      if (energies[index] == -1) {
+         energies[index] = getEnergy(x, y);
+      }
+      return energies[index];
+   }
+
+   private double getEnergy(int x, int y) {
       if (x < 0 || x >= width() || y < 0 || y >= height())
          throw new IllegalArgumentException();
 
@@ -162,6 +178,7 @@ public class SeamCarver {
          }
       }
       this.pic = pic;
+      initEnergies();
    }
 
    // remove vertical seam from current picture
@@ -182,6 +199,7 @@ public class SeamCarver {
          }
       }
       this.pic = pic;
+      initEnergies();
    }
 
    private boolean validateSeam(int[] seam, int seamLenght, int maxValue) {
