@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.Picture;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.EdgeWeightedDigraph;
 import edu.princeton.cs.algs4.DirectedEdge;
-import edu.princeton.cs.algs4.DijkstraSP;
+import edu.princeton.cs.algs4.AcyclicSP;
 
 public class SeamCarver {
    private Picture pic;
@@ -113,7 +113,7 @@ public class SeamCarver {
       }
 
       // Find the shortest path from virtualStart to virtualEnd
-      DijkstraSP sp = new DijkstraSP(D, virtualStart);
+      AcyclicSP sp = new AcyclicSP(D, virtualStart);
       int x = -1;
       int[] seam = new int[width()];
       for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
@@ -146,7 +146,7 @@ public class SeamCarver {
       }
 
       // Find the shortest path from virtualStart to virtualEnd
-      DijkstraSP sp = new DijkstraSP(D, virtualStart);
+      AcyclicSP sp = new AcyclicSP(D, virtualStart);
       int y = -1;
       int[] seam = new int[height()];
       for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
