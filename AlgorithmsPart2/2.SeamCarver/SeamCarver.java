@@ -54,8 +54,12 @@ public class SeamCarver {
       return (x % width()) + (y % height()) * width();
    }
 
-   private int index2col(int digraphIndex) {
-      return digraphIndex / height();
+   private int index2x(int digraphIndex) {
+      return digraphIndex % width();
+   }
+
+   private int index2y(int digraphIndex) {
+      return digraphIndex / width();
    }
 
    private void addEdge(EdgeWeightedDigraph D, int fromX, int fromY, int toX, int toY) {
@@ -95,7 +99,7 @@ public class SeamCarver {
       int[] seam = new int[width()];
       for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
          if (0 <= x && x < width()) {
-            int fromY = index2col(edge.from());
+            int fromY = index2y(edge.from());
             seam[x] = fromY;
          }
          x++;
@@ -172,12 +176,12 @@ public class SeamCarver {
    // unit testing (optional)
    public static void main(String[] args) {
       SeamCarver s = new SeamCarver(new Picture(3, 2));
-      assert s.digraphIndex(0, 0) == 0;
-      assert s.digraphIndex(1, 0) == 1;
-      assert s.digraphIndex(2, 0) == 2;
-      assert s.digraphIndex(0, 1) == 3;
-      assert s.digraphIndex(1, 1) == 4;
-      assert s.digraphIndex(2, 1) == 5;
+      assert s.digraphIndex(0, 0) == 0 && s.index2x(0) == 0 && s.index2y(0) == 0;
+      assert s.digraphIndex(1, 0) == 1 && s.index2x(1) == 1 && s.index2y(1) == 0;
+      assert s.digraphIndex(2, 0) == 2 && s.index2x(2) == 2 && s.index2y(2) == 0;
+      assert s.digraphIndex(0, 1) == 3 && s.index2x(3) == 0 && s.index2y(3) == 1;
+      assert s.digraphIndex(1, 1) == 4 && s.index2x(4) == 1 && s.index2y(4) == 1;
+      assert s.digraphIndex(2, 1) == 5 && s.index2x(5) == 2 && s.index2y(5) == 1;
    }
 
 }
