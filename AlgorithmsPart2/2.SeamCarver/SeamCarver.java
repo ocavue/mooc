@@ -1,4 +1,7 @@
 import edu.princeton.cs.algs4.Picture;
+import edu.princeton.cs.algs4.EdgeWeightedDigraph;
+import edu.princeton.cs.algs4.DirectedEdge;
+import edu.princeton.cs.algs4.DijkstraSP;
 
 public class SeamCarver {
    private Picture pic;
@@ -45,12 +48,60 @@ public class SeamCarver {
       return Math.pow(rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by, 0.5);
    }
 
+   private int digraphIndex(int x, int y) {
+      assert 0 <= x && x < width();
+      assert 0 <= y && y < height();
+      return (x / width()) + (y / height()) * width();
+   }
+
+   private void addEdge(EdgeWeightedDigraph D, int fromX, int fromY, int toX, int toY) {
+      if (
+      // @formatter:off
+         0 <= fromX && fromX < width()  &&
+         0 <= fromY && fromY < height() &&
+         0 <= toX   && toX   < width()  &&
+         0 <= toY   && toY   < height()
+      // @formatter:on
+      ) {
+         D.addEdge(new DirectedEdge(digraphIndex(fromX, fromY), digraphIndex(toX, toY), energy(toX, toY)));
+      }
+   }
+
    // sequence of indices for horizontal seam
    public int[] findHorizontalSeam() {
+      // Build a EdgeWeightedDigraph
+      EdgeWeightedDigraph D = new EdgeWeightedDigraph(height() * width() + 2);
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y <= height(); y++) {
+            addEdge(D, x, y, x + 1, y - 1);
+            addEdge(D, x, y, x + 1, y);
+            addEdge(D, x, y, x + 1, y + 1);
+         }
+      }
+      final int virtualStart = height() * width();
+      final int virtualEnd = height() * width() + 1;
+      for (int y = 0; y <= height(); y++) {
+         D.addEdge(new DirectedEdge(virtualStart, digraphIndex(0, y), 0));
+         D.addEdge(new DirectedEdge(digraphIndex(width() - 1, y), virtualEnd, 0));
+      }
+
+      // Find the shortest path from virtualStart to virtualEnd
+      DijkstraSP sp = new DijkstraSP(D, virtualStart);
+      int x = -1;
+      int[] seam = new int[width()];
+      for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
+         if (0 <= x && x < width()) {
+            int fromY = index2col(edge.from());
+            seam[x] = fromY;
+         }
+         x++;
+      }
+      assert validateSeam(seam, width(), height() - 1);
    }
 
    // sequence of indices for vertical seam
    public int[] findVerticalSeam() {
+      return null; // TODO
    }
 
    // remove horizontal seam from current picture
@@ -93,7 +144,7 @@ public class SeamCarver {
       this.pic = pic;
    }
 
-   private void validateSeam(int[] seam, int seamLenght, int maxValue) {
+   private boolean validateSeam(int[] seam, int seamLenght, int maxValue) {
       if (seam == null)
          throw new IllegalArgumentException();
       if (length(sean) != seamLenght)
@@ -110,6 +161,7 @@ public class SeamCarver {
                throw new IllegalArgumentException();
          }
       }
+      return true;
    }
 
    // unit testing (optional)
