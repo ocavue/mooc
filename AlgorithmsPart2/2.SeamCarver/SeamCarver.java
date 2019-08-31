@@ -1,4 +1,6 @@
+import java.awt.Color;
 import edu.princeton.cs.algs4.Picture;
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.EdgeWeightedDigraph;
 import edu.princeton.cs.algs4.DirectedEdge;
 import edu.princeton.cs.algs4.DijkstraSP;
@@ -71,7 +73,8 @@ public class SeamCarver {
          0 <= toY   && toY   < height()
       // @formatter:on
       ) {
-         D.addEdge(new DirectedEdge(digraphIndex(fromX, fromY), digraphIndex(toX, toY), energy(toX, toY)));
+         double weight = energy(fromX, fromY) + energy(toX, toY);
+         D.addEdge(new DirectedEdge(digraphIndex(fromX, fromY), digraphIndex(toX, toY), weight));
       }
    }
 
@@ -88,7 +91,7 @@ public class SeamCarver {
       }
       final int virtualStart = height() * width();
       final int virtualEnd = height() * width() + 1;
-      for (int y = 0; y <= height(); y++) {
+      for (int y = 0; y < height(); y++) {
          D.addEdge(new DirectedEdge(virtualStart, digraphIndex(0, y), 0));
          D.addEdge(new DirectedEdge(digraphIndex(width() - 1, y), virtualEnd, 0));
       }
@@ -155,14 +158,14 @@ public class SeamCarver {
 
    private boolean validateSeam(int[] seam, int seamLenght, int maxValue) {
       if (seam == null)
-         throw new IllegalArgumentException();
+         throw new IllegalArgumentException("seam is null");
       if (seam.length != seamLenght)
-         throw new IllegalArgumentException();
-      if (maxValue <= 1)
-         throw new IllegalArgumentException();
+         throw new IllegalArgumentException("seam.length is wrong");
+      if (maxValue <= 0)
+         throw new IllegalArgumentException("maxValue should small than 1");
 
       for (int i = 0; i < seam.length; i++) {
-         if (seam[i] < 0 || seam[i] >= maxValue)
+         if (seam[i] < 0 || seam[i] > maxValue)
             throw new IllegalArgumentException();
          if (i + 1 < seam.length) {
             int diff = seam[i] - seam[i + 1];
@@ -175,13 +178,26 @@ public class SeamCarver {
 
    // unit testing (optional)
    public static void main(String[] args) {
-      SeamCarver s = new SeamCarver(new Picture(3, 2));
+      Picture p = new Picture(3, 2);
+      p.set(0, 0, new Color(0, 0, 0));
+      p.set(1, 0, new Color(0, 0, 0));
+      p.set(2, 0, new Color(0, 0, 0));
+      p.set(0, 1, new Color(255, 255, 255));
+      p.set(1, 1, new Color(255, 255, 255));
+      p.set(2, 1, new Color(255, 255, 255));
+
+      SeamCarver s = new SeamCarver(p);
       assert s.digraphIndex(0, 0) == 0 && s.index2x(0) == 0 && s.index2y(0) == 0;
       assert s.digraphIndex(1, 0) == 1 && s.index2x(1) == 1 && s.index2y(1) == 0;
       assert s.digraphIndex(2, 0) == 2 && s.index2x(2) == 2 && s.index2y(2) == 0;
       assert s.digraphIndex(0, 1) == 3 && s.index2x(3) == 0 && s.index2y(3) == 1;
       assert s.digraphIndex(1, 1) == 4 && s.index2x(4) == 1 && s.index2y(4) == 1;
       assert s.digraphIndex(2, 1) == 5 && s.index2x(5) == 2 && s.index2y(5) == 1;
+
+      int[] horizontalSeam = s.findHorizontalSeam();
+      assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
+      assert horizontalSeam[1] == 0;
+      assert horizontalSeam[2] <= 1 || horizontalSeam[0] >= 0;
    }
 
 }
