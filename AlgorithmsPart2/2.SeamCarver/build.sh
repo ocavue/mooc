@@ -6,7 +6,7 @@ clear
 
 javac-algs4 -nowarn ./*.java
 
-java-algs4 -ea SeamCarver
+# java-algs4 -ea SeamCarver
 
 mkdir -p ./output
 time=$(date +%Y-%m-%d_%H-%M-%S)
