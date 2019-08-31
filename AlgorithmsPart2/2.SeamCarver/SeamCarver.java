@@ -12,16 +12,17 @@ public class SeamCarver {
 
    // current picture
    public Picture picture() {
+      return pic;
    }
 
    // width of current picture
    public int width() {
-      return pic.width;
+      return pic.width();
    }
 
    // height of current picture
    public int height() {
-      return pic.height;
+      return pic.height();
    }
 
    // energy of pixel at column x and row y
