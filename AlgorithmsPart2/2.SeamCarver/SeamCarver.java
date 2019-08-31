@@ -150,7 +150,7 @@ public class SeamCarver {
       Picture pic = new Picture(width(), height() - 1);
       for (int x = 0; x < width(); x++) {
          int seamY = seam[x];
-         for (int y = 0; y <= height(); y++) {
+         for (int y = 0; y < height(); y++) {
             int newY;
             if (y < seamY)
                newY = y;
@@ -170,7 +170,7 @@ public class SeamCarver {
       Picture pic = new Picture(width() - 1, height());
       for (int y = 0; y < height(); y++) {
          int seamX = seam[y];
-         for (int x = 0; x <= width(); x++) {
+         for (int x = 0; x < width(); x++) {
             int newX;
             if (x < seamX)
                newX = x;
@@ -223,9 +223,19 @@ public class SeamCarver {
       assert s.digraphIndex(2, 1) == 5 && s.index2x(5) == 2 && s.index2y(5) == 1;
 
       int[] horizontalSeam = s.findHorizontalSeam();
-      int[] verticalSeam = s.findVerticalSeam();
       assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
       assert horizontalSeam[1] == 0;
       assert horizontalSeam[2] <= 1 || horizontalSeam[0] >= 0;
+
+      p = new Picture("./input.png");
+      s = new SeamCarver(p);
+      int i = 1;
+      while (i <= 150) {
+         int[] seam = s.findVerticalSeam();
+         s.removeVerticalSeam(seam);
+         StdOut.print(String.format("Removing %d seam\r", i));
+         i++;
+      }
+      s.picture().save("./output.png");
    }
 }
