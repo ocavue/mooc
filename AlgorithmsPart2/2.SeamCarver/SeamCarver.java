@@ -51,7 +51,7 @@ public class SeamCarver {
    private int digraphIndex(int x, int y) {
       assert 0 <= x && x < width();
       assert 0 <= y && y < height();
-      return (x / width()) + (y / height()) * width();
+      return (x % width()) + (y % height()) * width();
    }
 
    private int index2col(int digraphIndex) {
@@ -171,6 +171,13 @@ public class SeamCarver {
 
    // unit testing (optional)
    public static void main(String[] args) {
+      SeamCarver s = new SeamCarver(new Picture(3, 2));
+      assert s.digraphIndex(0, 0) == 0;
+      assert s.digraphIndex(1, 0) == 1;
+      assert s.digraphIndex(2, 0) == 2;
+      assert s.digraphIndex(0, 1) == 3;
+      assert s.digraphIndex(1, 1) == 4;
+      assert s.digraphIndex(2, 1) == 5;
    }
 
 }
