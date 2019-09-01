@@ -191,7 +191,7 @@ public class SeamCarver {
    // }
 
    // sequence of indices for vertical seam
-   public int[] findVerticalSeam() {
+   /*public int[] findVerticalSeamOld() {
       final int virtualStart = height() * width();
       final int virtualEnd = height() * width() + 1;
       int V = height() * width() + 2;
@@ -262,7 +262,7 @@ public class SeamCarver {
       }
       assert validateSeam(seam, height(), width() - 1);
       return seam;
-   }
+   }*/
 
    // remove horizontal seam from current picture
    public void removeHorizontalSeam(int[] seam) {
@@ -283,6 +283,75 @@ public class SeamCarver {
       }
       this.pic = pic;
       initEnergies();
+   }
+
+   public int[] findVerticalSeam() {
+      double[][] distTo = new double[width()][height()];
+      int[][] pathTo = new int[width()][height()];
+
+      for (int y = 0; y < height(); y++) {
+         for (int x = 0; x < width(); x++) {
+            if (y == 0) {
+               distTo[x][y] = 0;
+               pathTo[x][y] = -1;
+            } else {
+               distTo[x][y] = Double.POSITIVE_INFINITY;
+               pathTo[x][y] = Integer.MIN_VALUE;
+            }
+         }
+      }
+
+      for (int y = 1; y < height(); y++) {
+         for (int x = 0; x < width(); x++) {
+            int[] fromXs;
+
+            if (x == 0)
+               fromXs = new int[] { x, x + 1 };
+            else if (x == width() - 1)
+               fromXs = new int[] { x - 1, x };
+            else
+               fromXs = new int[] { x - 1, x, x + 1 };
+
+            for (int i = 0; i < fromXs.length; i++) {
+               int fromX = fromXs[i];
+               if (distTo[x][y] > distTo[fromX][y - 1] + energy(x, y)) {
+                  distTo[x][y] = distTo[fromX][y - 1];
+                  pathTo[x][y] = fromX;
+               }
+            }
+            assert pathTo[x][y] >= 0;
+         }
+      }
+
+      for (int y = 0; y < height(); y++) {
+         for (int x = 0; x < width(); x++) {
+            assert distTo[x][y] != Double.POSITIVE_INFINITY : String
+                  .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
+            ;
+            assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] != Integer.MIN_VALUE", x, y);
+         }
+      }
+
+      int topY = height() - 1;
+      double minDist = Double.POSITIVE_INFINITY;
+      int minTopX = -1;
+      for (int x = 0; x < width(); x++) {
+         if (distTo[x][topY] < minDist) {
+            minDist = distTo[x][topY];
+            minTopX = x;
+         }
+      }
+      assert minTopX != -1;
+
+      int[] seam = new int[height()];
+      int seamX = minTopX;
+      for (int y = height() - 1; y >= 0; y--) {
+         seam[y] = seamX;
+         if (y - 1 >= 1)
+            seamX = pathTo[minTopX][y - 1];
+      }
+      validateSeam(seam, height(), width() - 1);
+      return seam;
    }
 
    // remove vertical seam from current picture
@@ -316,7 +385,7 @@ public class SeamCarver {
 
       for (int i = 0; i < seam.length; i++) {
          if (seam[i] < 0 || seam[i] > maxValue)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.format("seam[%d] == %d", i, seam[i]));
          if (i + 1 < seam.length) {
             int diff = seam[i] - seam[i + 1];
             if (diff < -1 || diff > 1)
