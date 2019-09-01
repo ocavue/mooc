@@ -157,134 +157,7 @@ public class SeamCarver {
       }
    }
 
-   // // sequence of indices for horizontal seam
-   // public int[] findHorizontalSeam() {
-   // // Build a EdgeWeightedDigraph
-   // EdgeWeightedDigraph D = new EdgeWeightedDigraph(height() * width() + 2);
-   // for (int x = 0; x < width(); x++) {
-   // for (int y = 0; y <= height(); y++) {
-   // addEdge(D, x, y, x + 1, y - 1);
-   // addEdge(D, x, y, x + 1, y);
-   // addEdge(D, x, y, x + 1, y + 1);
-   // }
-   // }
-   // final int virtualStart = height() * width();
-   // final int virtualEnd = height() * width() + 1;
-   // for (int y = 0; y < height(); y++) {
-   // D.addEdge(new DirectedEdge(virtualStart, digraphIndex(0, y), 0));
-   // D.addEdge(new DirectedEdge(digraphIndex(width() - 1, y), virtualEnd, 0));
-   // }
-
-   // // Find the shortest path from virtualStart to virtualEnd
-   // AcyclicSP sp = new AcyclicSP(D, virtualStart);
-   // int x = -1;
-   // int[] seam = new int[width()];
-   // for (DirectedEdge edge : sp.pathTo(virtualEnd)) {
-   // if (0 <= x && x < width()) {
-   // int fromY = index2y(edge.from());
-   // seam[x] = fromY;
-   // }
-   // x++;
-   // }
-   // assert validateSeam(seam, width(), height() - 1);
-   // return seam;
-   // }
-
-   // sequence of indices for vertical seam
-   /*public int[] findVerticalSeamOld() {
-      final int virtualStart = height() * width();
-      final int virtualEnd = height() * width() + 1;
-      int V = height() * width() + 2;
-
-      int[][] edges = new int[V][];
-      for (int x = 0; x < width(); x++) {
-         for (int y = 0; y < height() - 1; y++) {
-            // @formatter:off
-            int index = digraphIndex(x, y);
-            if (x == 0) {
-               edges[index] = new int[] {
-                  digraphIndex(x    , y + 1),
-                  digraphIndex(x + 1, y + 1),
-               };
-            } else if (x == width() - 1) {
-               edges[index] = new int[] {
-                  digraphIndex(x - 1, y + 1),
-                  digraphIndex(x    , y + 1),
-               };
-            } else {
-               edges[index] = new int[] {
-                  digraphIndex(x - 1, y + 1),
-                  digraphIndex(x    , y + 1),
-                  digraphIndex(x + 1, y + 1),
-               };
-            }
-            // @formatter:on
-         }
-      }
-
-      edges[virtualStart] = new int[width()];
-
-      for (int x = 0; x < width(); x++) {
-         int index = digraphIndex(x, 0);
-         edges[virtualStart][x] = index;
-      }
-      for (int x = 0; x < width(); x++) {
-         int y = height() - 1;
-         int index = digraphIndex(x, y);
-         edges[index] = new int[] { virtualEnd };
-      }
-      edges[virtualEnd] = new int[] {};
-
-      for (int i = 0; i < edges.length; i++)
-         assert edges[i] != null : String.format("edges[%d] is null", i);
-
-      int[] order = new int[width() * height() + 2];
-      order[0] = virtualStart;
-      int orderIndex = 1;
-      for (int x = 0; x < width(); x++) {
-         for (int y = 0; y < height() - 1; y++) {
-            order[orderIndex] = digraphIndex(x, y);
-            orderIndex++;
-         }
-      }
-      order[width() * height() + 1] = virtualEnd;
-
-      // Find the shortest path from virtualStart to virtualEnd
-      AcyclicSP sp = new AcyclicSP(edges, order, virtualStart);
-      int y = -1;
-      int[] seam = new int[height()];
-      for (int v : sp.pathTo(virtualEnd)) {
-         if (0 <= y && y < height()) {
-            int fromX = index2x(v);
-            seam[y] = fromX;
-         }
-         y++;
-      }
-      assert validateSeam(seam, height(), width() - 1);
-      return seam;
-   }*/
-
-   // remove horizontal seam from current picture
-   public void removeHorizontalSeam(int[] seam) {
-      validateSeam(seam, width(), height() - 1);
-      Picture pic = new Picture(width(), height() - 1);
-      for (int x = 0; x < width(); x++) {
-         int seamY = seam[x];
-         for (int y = 0; y < height(); y++) {
-            int newY;
-            if (y < seamY)
-               newY = y;
-            else if (y > seamY)
-               newY = y - 1;
-            else
-               continue;
-            pic.set(x, newY, this.pic.get(x, y));
-         }
-      }
-      this.pic = pic;
-      initEnergies();
-   }
-
+   // sequence of indices for horizontal seam
    public int[] findVerticalSeam() {
       double[][] distTo = new double[width()][height()];
       int[][] pathTo = new int[width()][height()];
@@ -356,6 +229,27 @@ public class SeamCarver {
       seam[0] = seam[1];
       validateSeam(seam, height(), width() - 1);
       return seam;
+   }
+
+   // remove horizontal seam from current picture
+   public void removeHorizontalSeam(int[] seam) {
+      validateSeam(seam, width(), height() - 1);
+      Picture pic = new Picture(width(), height() - 1);
+      for (int x = 0; x < width(); x++) {
+         int seamY = seam[x];
+         for (int y = 0; y < height(); y++) {
+            int newY;
+            if (y < seamY)
+               newY = y;
+            else if (y > seamY)
+               newY = y - 1;
+            else
+               continue;
+            pic.set(x, newY, this.pic.get(x, y));
+         }
+      }
+      this.pic = pic;
+      initEnergies();
    }
 
    // remove vertical seam from current picture
