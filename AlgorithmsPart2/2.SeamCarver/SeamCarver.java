@@ -106,8 +106,8 @@ public class SeamCarver {
 
             for (int i = 0; i < fromXs.length; i++) {
                int fromX = fromXs[i];
-               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY)) {
-                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY);
+               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y)) {
+                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y);
                   pathTo[x][y] = fromX;
                }
             }
@@ -186,8 +186,8 @@ public class SeamCarver {
 
             for (int i = 0; i < fromYs.length; i++) {
                int fromY = fromYs[i];
-               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY)) {
-                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY);
+               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y)) {
+                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y);
                   pathTo[x][y] = fromY;
                }
             }
