@@ -143,7 +143,7 @@ public class SeamCarver {
          if (y - 1 >= 0)
             seamX = pathTo[seamX][y - 1];
       }
-      seam[1] = seam[2];
+      // seam[1] = seam[2];
       seam[0] = seam[1];
       validateSeam(seam, height(), width() - 1);
       return seam;
