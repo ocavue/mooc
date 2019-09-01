@@ -276,7 +276,7 @@ public class SeamCarver {
          }
       }
       this.pic = pic;
-      initEnergies();
+      this.energies = energies;
    }
 
    private boolean validateSeam(int[] seam, int seamLenght, int maxValue) {
