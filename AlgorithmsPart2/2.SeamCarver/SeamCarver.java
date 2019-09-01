@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.Topological;
 
 public class SeamCarver {
    private Picture pic;
-   private double[][] energies;
+   private double[] energies;
 
    // create a seam carver object based on the given picture
    public SeamCarver(Picture picture) {
@@ -21,11 +21,9 @@ public class SeamCarver {
    }
 
    private void initEnergies() {
-      energies = new double[pic.width()][pic.height()];
-      for (int x = 0; x < width(); x++) {
-         for (int y = 0; y < height(); y++) {
-            energies[x][y] = -1;
-         }
+      energies = new double[pic.width() * pic.height()];
+      for (int i =0 ; i < energies.length; i ++) {
+         energies[i] = -1;
       }
    }
 
@@ -49,10 +47,11 @@ public class SeamCarver {
       if (x < 0 || x >= width() || y < 0 || y >= height())
          throw new IllegalArgumentException();
 
-      if (energies[x][y] == -1) {
-         energies[x][y] = calEnergy(x, y);
+      int index = (x % width()) + (y % height()) * width();
+      if (energies[index] == -1) {
+         energies[index] = calEnergy(x, y);
       }
-      return energies[x][y];
+      return energies[index];
    }
 
    private double calEnergy(int x, int y) {
