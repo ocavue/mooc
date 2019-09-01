@@ -116,15 +116,16 @@ public class SeamCarver {
          }
       }
 
-      // check distTo and pathTo
-      for (int y = 0; y < height(); y++) {
-         for (int x = 0; x < width(); x++) {
-            assert distTo[x][y] != Double.POSITIVE_INFINITY : String
-                  .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
-            ;
-            assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] != Integer.MIN_VALUE", x, y);
-         }
-      }
+      // // check distTo and pathTo
+      // for (int y = 0; y < height(); y++) {
+      // for (int x = 0; x < width(); x++) {
+      // assert distTo[x][y] != Double.POSITIVE_INFINITY : String
+      // .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
+      // ;
+      // assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] !=
+      // Integer.MIN_VALUE", x, y);
+      // }
+      // }
 
       // find the pixel with smallest dist
       int topY = height() - 1;
@@ -196,15 +197,16 @@ public class SeamCarver {
          }
       }
 
-      // check distTo and pathTo
-      for (int x = 0; x < width(); x++) {
-         for (int y = 0; y < height(); y++) {
-            assert distTo[x][y] != Double.POSITIVE_INFINITY : String
-                  .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
-            ;
-            assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] != Integer.MIN_VALUE", x, y);
-         }
-      }
+      // // check distTo and pathTo
+      // for (int x = 0; x < width(); x++) {
+      // for (int y = 0; y < height(); y++) {
+      // assert distTo[x][y] != Double.POSITIVE_INFINITY : String
+      // .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
+      // ;
+      // assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] !=
+      // Integer.MIN_VALUE", x, y);
+      // }
+      // }
 
       // find the pixel with smallest dist
       int rightX = width() - 1;
