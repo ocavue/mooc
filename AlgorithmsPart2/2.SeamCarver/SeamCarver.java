@@ -250,7 +250,7 @@ public class SeamCarver {
                continue;
             pic.set(x, newY, this.pic.get(x, y));
             if (y == seamY - 1 && y == seamY + 1) {
-               energies[x][newY] = 1;
+               energies[x][newY] = -1;
             } else {
                energies[x][newY] = this.energies[x][y];
             }
