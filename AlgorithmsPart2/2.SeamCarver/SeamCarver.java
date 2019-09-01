@@ -70,7 +70,7 @@ public class SeamCarver {
       return Math.pow(rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by, 0.5);
    }
 
-   // sequence of indices for horizontal seam
+   // sequence of indices for vertical seam
    public int[] findVerticalSeam() {
       double[][] distTo = new double[width()][height()];
       int[][] pathTo = new int[width()][height()];
