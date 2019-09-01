@@ -250,8 +250,10 @@ public class SeamCarver {
                continue;
             pic.set(x, newY, this.pic.get(x, y));
             if (y == seamY - 1 || y == seamY + 1) {
+               // These energies may change
                energies[x][newY] = -1;
             } else {
+               // These energies don't change
                energies[x][newY] = this.energies[x][y];
             }
          }
@@ -277,8 +279,10 @@ public class SeamCarver {
                continue;
             pic.set(newX, y, this.pic.get(x, y));
             if (x == seamX - 1 || x == seamX + 1) {
+               // These energies may change
                energies[newX][y] = -1;
             } else {
+               // These energies don't change
                energies[newX][y] = this.energies[x][y];
             }
          }
