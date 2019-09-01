@@ -15,7 +15,7 @@ public class SeamCarver {
       private double[] distTo;
       private int[] edgeTo;
 
-      public AcyclicSP(int[][] edges, int s) {
+      public AcyclicSP(int[][] edges, int[] order, int s) {
          int V = edges.length;
          distTo = new double[V];
          edgeTo = new int[V];
@@ -36,10 +36,11 @@ public class SeamCarver {
          // relax(e);
          // }
 
-         for (int v = 0; v < V; v++) {
+         for (int i = 0; i < V; i++) {
+            int v = order[i];
             int[] tos = edges[v];
-            for (int i = 0; i < tos.length; i++) {
-               relax(v, tos[i], energy(v));
+            for (int j = 0; j < tos.length; j++) {
+               relax(v, tos[j], energy(v));
             }
          }
       }
@@ -222,6 +223,7 @@ public class SeamCarver {
       }
 
       edges[virtualStart] = new int[width()];
+
       for (int x = 0; x < width(); x++) {
          int index = digraphIndex(x, 0);
          edges[virtualStart][x] = index;
@@ -236,8 +238,19 @@ public class SeamCarver {
       for (int i = 0; i < edges.length; i++)
          assert edges[i] != null : String.format("edges[%d] is null", i);
 
+      int[] order = new int[width() * height() + 2];
+      order[0] = virtualStart;
+      int orderIndex = 1;
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y < height() - 1; y++) {
+            order[orderIndex] = digraphIndex(x, y);
+            orderIndex++;
+         }
+      }
+      order[width() * height() + 1] = virtualEnd;
+
       // Find the shortest path from virtualStart to virtualEnd
-      AcyclicSP sp = new AcyclicSP(edges, virtualStart);
+      AcyclicSP sp = new AcyclicSP(edges, order, virtualStart);
       int y = -1;
       int[] seam = new int[height()];
       for (int v : sp.pathTo(virtualEnd)) {
