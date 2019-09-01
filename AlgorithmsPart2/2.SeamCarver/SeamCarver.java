@@ -9,57 +9,7 @@ import edu.princeton.cs.algs4.Topological;
 
 public class SeamCarver {
    private Picture pic;
-   private double[] energies;
-
-   private class AcyclicSP {
-      private double[] distTo;
-      private int[] edgeTo;
-
-      public AcyclicSP(int[][] edges, int[] order, int s) {
-         int V = edges.length;
-         distTo = new double[V];
-         edgeTo = new int[V];
-
-         for (int v = 0; v < V; v++) {
-            distTo[v] = Double.POSITIVE_INFINITY;
-            edgeTo[v] = -1;
-         }
-         distTo[s] = 0.0;
-
-         // TODO
-         // // visit vertices in topological order
-         // Topological topological = new Topological(G);
-         // if (!topological.hasOrder())
-         // throw new IllegalArgumentException("Digraph is not acyclic.");
-         // for (int v : topological.order()) {
-         // for (DirectedEdge e : G.adj(v))
-         // relax(e);
-         // }
-
-         for (int i = 0; i < V; i++) {
-            int v = order[i];
-            int[] tos = edges[v];
-            for (int j = 0; j < tos.length; j++) {
-               relax(v, tos[j], energy(v));
-            }
-         }
-      }
-
-      private void relax(int from, int to, double weigth) {
-         if (distTo[to] > distTo[from] + weigth) {
-            edgeTo[to] = from;
-            distTo[to] = distTo[from] + weigth;
-         }
-      }
-
-      public Iterable<Integer> pathTo(int v) {
-         Stack<Integer> path = new Stack<Integer>();
-         for (Integer e = edgeTo[v]; e != -1; e = edgeTo[e]) {
-            path.push(e);
-         }
-         return path;
-      }
-   }
+   private double[][] energies;
 
    // create a seam carver object based on the given picture
    public SeamCarver(Picture picture) {
@@ -70,9 +20,12 @@ public class SeamCarver {
    }
 
    private void initEnergies() {
-      energies = new double[pic.width() * pic.height()];
-      for (int i = 0; i < energies.length; i++)
-         energies[i] = -1;
+      energies = new double[pic.width()][pic.height()];
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y < height(); y++) {
+            energies[x][y] = -1;
+         }
+      }
    }
 
    // current picture
@@ -95,25 +48,13 @@ public class SeamCarver {
       if (x < 0 || x >= width() || y < 0 || y >= height())
          throw new IllegalArgumentException();
 
-      int index = digraphIndex(x, y);
-      if (energies[index] == -1) {
-         energies[index] = getEnergy(x, y);
+      if (energies[x][y] == -1) {
+         energies[x][y] = calEnergy(x, y);
       }
-      return energies[index];
+      return energies[x][y];
    }
 
-   private double energy(int index) {
-      if (index == width() * height())
-         return 0.0;
-      if (index == width() * height() + 1)
-         return 0.0;
-      if (energies[index] == -1) {
-         energies[index] = getEnergy(index2x(index), index2y(index));
-      }
-      return energies[index];
-   }
-
-   private double getEnergy(int x, int y) {
+   private double calEnergy(int x, int y) {
       if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
          return 1000;
 
@@ -129,39 +70,12 @@ public class SeamCarver {
       return Math.pow(rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by, 0.5);
    }
 
-   private int digraphIndex(int x, int y) {
-      assert 0 <= x && x < width();
-      assert 0 <= y && y < height();
-      return (x % width()) + (y % height()) * width();
-   }
-
-   private int index2x(int digraphIndex) {
-      return digraphIndex % width();
-   }
-
-   private int index2y(int digraphIndex) {
-      return digraphIndex / width();
-   }
-
-   private void addEdge(EdgeWeightedDigraph D, int fromX, int fromY, int toX, int toY) {
-      if (
-      // @formatter:off
-         0 <= fromX && fromX < width()  &&
-         0 <= fromY && fromY < height() &&
-         0 <= toX   && toX   < width()  &&
-         0 <= toY   && toY   < height()
-      // @formatter:on
-      ) {
-         double weight = energy(fromX, fromY) + energy(toX, toY);
-         D.addEdge(new DirectedEdge(digraphIndex(fromX, fromY), digraphIndex(toX, toY), weight));
-      }
-   }
-
    // sequence of indices for horizontal seam
    public int[] findVerticalSeam() {
       double[][] distTo = new double[width()][height()];
       int[][] pathTo = new int[width()][height()];
 
+      // init distTo and pathTo
       for (int y = 0; y < height(); y++) {
          for (int x = 0; x < width(); x++) {
             if (y == 0) {
@@ -174,6 +88,7 @@ public class SeamCarver {
          }
       }
 
+      // build distTo and pathTo
       for (int y = 1; y < height(); y++) {
          for (int x = 0; x < width(); x++) {
             int[] fromXs;
@@ -198,6 +113,7 @@ public class SeamCarver {
          }
       }
 
+      // check distTo and pathTo
       for (int y = 0; y < height(); y++) {
          for (int x = 0; x < width(); x++) {
             assert distTo[x][y] != Double.POSITIVE_INFINITY : String
@@ -207,6 +123,7 @@ public class SeamCarver {
          }
       }
 
+      // find the pixel with smallest dist
       int topY = height() - 1;
       double minDist = Double.POSITIVE_INFINITY;
       int minTopX = -1;
@@ -218,6 +135,7 @@ public class SeamCarver {
       }
       assert minTopX != -1;
 
+      // find the shortest path
       int[] seam = new int[height()];
       int seamX = minTopX;
       for (int y = height() - 1; y >= 0; y--) {
