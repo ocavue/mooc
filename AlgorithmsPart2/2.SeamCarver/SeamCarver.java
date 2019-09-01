@@ -146,7 +146,7 @@ public class SeamCarver {
             seamX = pathTo[seamX][y];
       }
       // seam[1] = seam[2];
-      seam[0] = seam[1];
+      // seam[0] = seam[1];
       validateSeam(seam, height(), width() - 1);
       return seam;
    }
@@ -226,7 +226,7 @@ public class SeamCarver {
             seamY = pathTo[x][seamY];
       }
       // seam[1] = seam[2];
-      seam[0] = seam[1];
+      // seam[0] = seam[1];
       validateSeam(seam, width(), height() - 1);
       return seam;
    }
@@ -278,8 +278,8 @@ public class SeamCarver {
          throw new IllegalArgumentException("seam is null");
       if (seam.length != seamLenght)
          throw new IllegalArgumentException("seam.length is wrong");
-      if (maxValue <= 0)
-         throw new IllegalArgumentException("maxValue should small than 1");
+      if (maxValue < 0)
+         throw new IllegalArgumentException("maxValue should not small than 0");
 
       for (int i = 0; i < seam.length; i++) {
          if (seam[i] < 0 || seam[i] > maxValue)
@@ -297,6 +297,12 @@ public class SeamCarver {
    public static void main(String[] args) {
       Picture p;
       SeamCarver s;
+
+      p = new Picture(1, 1);
+      p.set(0, 0, new Color(0, 0, 0));
+      s = new SeamCarver(p);
+      s.findVerticalSeam();
+      s.findHorizontalSeam();
 
       p = new Picture(5, 5);
       for (int x = 0; x < 5; x++) {
