@@ -149,6 +149,85 @@ public class SeamCarver {
       return seam;
    }
 
+   // sequence of indices for horizontal seam
+   public int[] findHorizontalSeam() {
+      double[][] distTo = new double[width()][height()];
+      int[][] pathTo = new int[width()][height()];
+
+      // init distTo and pathTo
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y < height(); y++) {
+            if (x == 0) {
+               distTo[x][y] = 0;
+               pathTo[x][y] = -1;
+            } else {
+               distTo[x][y] = Double.POSITIVE_INFINITY;
+               pathTo[x][y] = Integer.MIN_VALUE;
+            }
+         }
+      }
+
+      // build distTo and pathTo
+      for (int x = 1; x < width(); x++) {
+         for (int y = 0; y < height(); y++) {
+            int[] fromYs;
+
+            if (y == 0)
+               fromYs = new int[] { y, y + 1 };
+            else if (y == height() - 1)
+               fromYs = new int[] { y - 1, y };
+            else
+               fromYs = new int[] { y - 1, y, y + 1 };
+
+            for (int i = 0; i < fromYs.length; i++) {
+               int fromY = fromYs[i];
+               if (distTo[x][y] >= distTo[x - 1][fromY] + energy(x, y)) {
+                  distTo[x][y] = distTo[x - 1][fromY] + energy(x, y);
+                  pathTo[x][y] = fromY;
+               }
+            }
+            assert pathTo[x][y] >= 0;
+            int diff = pathTo[x][y] - y;
+            assert -1 <= diff && diff <= 1;
+         }
+      }
+
+      // check distTo and pathTo
+      for (int x = 0; x < width(); x++) {
+         for (int y = 0; y < height(); y++) {
+            assert distTo[x][y] != Double.POSITIVE_INFINITY : String
+                  .format("distTo[%d][%d] != Double.POSITIVE_INFINITY", x, y);
+            ;
+            assert pathTo[x][y] != Integer.MIN_VALUE : String.format("pathTo[%d][%d] != Integer.MIN_VALUE", x, y);
+         }
+      }
+
+      // find the pixel with smallest dist
+      int rightX = width() - 1;
+      double minDist = Double.POSITIVE_INFINITY;
+      int minRightY = -1;
+      for (int y = 0; y < height(); y++) {
+         if (distTo[rightX][y] < minDist) {
+            minDist = distTo[rightX][y];
+            minRightY = y;
+         }
+      }
+      assert minRightY != -1;
+
+      // find the shortest path
+      int[] seam = new int[width()];
+      int seamY = minRightY;
+      for (int x = width() - 1; x >= 0; x--) {
+         seam[x] = seamY;
+         if (x - 1 >= 0)
+            seamY = pathTo[x - 1][seamY];
+      }
+      seam[1] = seam[2];
+      seam[0] = seam[1];
+      validateSeam(seam, width(), height() - 1);
+      return seam;
+   }
+
    // remove horizontal seam from current picture
    public void removeHorizontalSeam(int[] seam) {
       validateSeam(seam, width(), height() - 1);
@@ -216,26 +295,19 @@ public class SeamCarver {
       Picture p;
       SeamCarver s;
 
-      // p = new Picture(3, 2);
-      // p.set(0, 0, new Color(0, 0, 0));
-      // p.set(1, 0, new Color(0, 0, 0));
-      // p.set(2, 0, new Color(0, 0, 0));
-      // p.set(0, 1, new Color(255, 255, 255));
-      // p.set(1, 1, new Color(255, 255, 255));
-      // p.set(2, 1, new Color(255, 255, 255));
+      p = new Picture(3, 2);
+      p.set(0, 0, new Color(0, 0, 0));
+      p.set(1, 0, new Color(0, 0, 0));
+      p.set(2, 0, new Color(0, 0, 0));
+      p.set(0, 1, new Color(255, 255, 255));
+      p.set(1, 1, new Color(255, 255, 255));
+      p.set(2, 1, new Color(255, 255, 255));
 
-      // s = new SeamCarver(p);
-      // assert s.digraphIndex(0, 0) == 0 && s.index2x(0) == 0 && s.index2y(0) == 0;
-      // assert s.digraphIndex(1, 0) == 1 && s.index2x(1) == 1 && s.index2y(1) == 0;
-      // assert s.digraphIndex(2, 0) == 2 && s.index2x(2) == 2 && s.index2y(2) == 0;
-      // assert s.digraphIndex(0, 1) == 3 && s.index2x(3) == 0 && s.index2y(3) == 1;
-      // assert s.digraphIndex(1, 1) == 4 && s.index2x(4) == 1 && s.index2y(4) == 1;
-      // assert s.digraphIndex(2, 1) == 5 && s.index2x(5) == 2 && s.index2y(5) == 1;
-
-      // int[] horizontalSeam = s.findHorizontalSeam();
-      // assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
-      // assert horizontalSeam[1] == 0;
-      // assert horizontalSeam[2] <= 1 || horizontalSeam[0] >= 0;
+      s = new SeamCarver(p);
+      int[] horizontalSeam = s.findHorizontalSeam();
+      assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
+      assert horizontalSeam[1] == 0;
+      assert horizontalSeam[2] <= 1 || horizontalSeam[0] >= 0;
 
       p = new Picture("./input.png");
       s = new SeamCarver(p);
