@@ -95,7 +95,9 @@ public class SeamCarver {
             int[] fromXs;
             int fromY = y - 1;
 
-            if (x == 0)
+            if (x == 0 && x == width() - 1)
+               fromXs = new int[] { x };
+            else if (x == 0)
                fromXs = new int[] { x, x + 1 };
             else if (x == width() - 1)
                fromXs = new int[] { x - 1, x };
@@ -145,8 +147,6 @@ public class SeamCarver {
          if (y - 1 >= 0)
             seamX = pathTo[seamX][y];
       }
-      // seam[1] = seam[2];
-      // seam[0] = seam[1];
       validateSeam(seam, height(), width() - 1);
       return seam;
    }
@@ -175,7 +175,9 @@ public class SeamCarver {
             int fromX = x - 1;
             int[] fromYs;
 
-            if (y == 0)
+            if (y == 0 && y == height() - 1)
+               fromYs = new int[] { y };
+            else if (y == 0)
                fromYs = new int[] { y, y + 1 };
             else if (y == height() - 1)
                fromYs = new int[] { y - 1, y };
@@ -225,8 +227,6 @@ public class SeamCarver {
          if (x - 1 >= 0)
             seamY = pathTo[x][seamY];
       }
-      // seam[1] = seam[2];
-      // seam[0] = seam[1];
       validateSeam(seam, width(), height() - 1);
       return seam;
    }
@@ -319,7 +319,7 @@ public class SeamCarver {
       int[] verticalSeam = s.findVerticalSeam();
       StdOut.println(Arrays.toString(verticalSeam));
       assert 1 <= verticalSeam[0] && verticalSeam[0] <= 3;
-      assert verticalSeam[1] == 2 : String.format("verticalSeam[%d] == %d", 1, verticalSeam[1]) ;
+      assert verticalSeam[1] == 2 : String.format("verticalSeam[%d] == %d", 1, verticalSeam[1]);
       assert verticalSeam[2] == 2;
       assert verticalSeam[3] == 2;
       assert 1 <= verticalSeam[4] && verticalSeam[4] <= 3;
@@ -327,7 +327,7 @@ public class SeamCarver {
       int[] horizontalSeam = s.findHorizontalSeam();
       StdOut.println(Arrays.toString(horizontalSeam));
       assert 1 <= horizontalSeam[0] && horizontalSeam[0] <= 3;
-      assert horizontalSeam[1] == 2 : String.format("horizontalSeam[%d] == %d", 1, horizontalSeam[1]) ;
+      assert horizontalSeam[1] == 2 : String.format("horizontalSeam[%d] == %d", 1, horizontalSeam[1]);
       assert horizontalSeam[2] == 2;
       assert horizontalSeam[3] == 2;
       assert 1 <= horizontalSeam[4] && horizontalSeam[4] <= 3;
