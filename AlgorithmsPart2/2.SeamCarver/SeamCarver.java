@@ -22,7 +22,7 @@ public class SeamCarver {
 
    private void initEnergies() {
       energies = new double[pic.width() * pic.height()];
-      for (int i =0 ; i < energies.length; i ++) {
+      for (int i = 0; i < energies.length; i++) {
          energies[i] = -1;
       }
    }
