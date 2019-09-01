@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.Topological;
 
 public class SeamCarver {
    private Picture pic;
-   private double[] energies;
+   private double[][] energies;
 
    // create a seam carver object based on the given picture
    public SeamCarver(Picture picture) {
@@ -21,9 +21,11 @@ public class SeamCarver {
    }
 
    private void initEnergies() {
-      energies = new double[pic.width() * pic.height()];
-      for (int i = 0; i < energies.length; i++) {
-         energies[i] = -1;
+      energies = new double[pic.width()][pic.height()];
+      for (int x = 0; x < pic.width(); x++) {
+         for (int y = 0; y < pic.height(); y++) {
+            energies[x][y] = -1;
+         }
       }
    }
 
@@ -47,11 +49,10 @@ public class SeamCarver {
       if (x < 0 || x >= width() || y < 0 || y >= height())
          throw new IllegalArgumentException();
 
-      int index = (x % width()) + (y % height()) * width();
-      if (energies[index] == -1) {
-         energies[index] = calEnergy(x, y);
+      if (energies[x][y] == -1) {
+         energies[x][y] = calEnergy(x, y);
       }
-      return energies[index];
+      return energies[x][y];
    }
 
    private double calEnergy(int x, int y) {
@@ -236,6 +237,7 @@ public class SeamCarver {
    public void removeHorizontalSeam(int[] seam) {
       validateSeam(seam, width(), height() - 1);
       Picture pic = new Picture(width(), height() - 1);
+      double[][] energies = new double[width()][height() - 1];
       for (int x = 0; x < width(); x++) {
          int seamY = seam[x];
          for (int y = 0; y < height(); y++) {
@@ -247,16 +249,18 @@ public class SeamCarver {
             else
                continue;
             pic.set(x, newY, this.pic.get(x, y));
+            energies[x][newY] = this.energies[x][y];
          }
       }
       this.pic = pic;
-      initEnergies();
+      this.energies = energies;
    }
 
    // remove vertical seam from current picture
    public void removeVerticalSeam(int[] seam) {
       validateSeam(seam, height(), width() - 1);
       Picture pic = new Picture(width() - 1, height());
+      double[][] energies = new double[width() - 1][height()];
       for (int y = 0; y < height(); y++) {
          int seamX = seam[y];
          for (int x = 0; x < width(); x++) {
@@ -268,6 +272,7 @@ public class SeamCarver {
             else
                continue;
             pic.set(newX, y, this.pic.get(x, y));
+            energies[newX][y] = this.energies[x][y];
          }
       }
       this.pic = pic;
