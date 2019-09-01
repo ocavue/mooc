@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Stack;
 import edu.princeton.cs.algs4.Picture;
 import edu.princeton.cs.algs4.StdOut;
@@ -92,6 +93,7 @@ public class SeamCarver {
       for (int y = 1; y < height(); y++) {
          for (int x = 0; x < width(); x++) {
             int[] fromXs;
+            int fromY = y - 1;
 
             if (x == 0)
                fromXs = new int[] { x, x + 1 };
@@ -102,12 +104,12 @@ public class SeamCarver {
 
             for (int i = 0; i < fromXs.length; i++) {
                int fromX = fromXs[i];
-               if (distTo[x][y] >= distTo[fromX][y - 1] + energy(x, y)) {
-                  distTo[x][y] = distTo[fromX][y - 1] + energy(x, y);
+               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY)) {
+                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY);
                   pathTo[x][y] = fromX;
                }
             }
-            assert pathTo[x][y] >= 0;
+            assert 0 <= pathTo[x][y] && pathTo[x][y] <= width() - 1;
             int diff = pathTo[x][y] - x;
             assert -1 <= diff && diff <= 1;
          }
@@ -141,7 +143,7 @@ public class SeamCarver {
       for (int y = height() - 1; y >= 0; y--) {
          seam[y] = seamX;
          if (y - 1 >= 0)
-            seamX = pathTo[seamX][y - 1];
+            seamX = pathTo[seamX][y];
       }
       // seam[1] = seam[2];
       seam[0] = seam[1];
@@ -170,6 +172,7 @@ public class SeamCarver {
       // build distTo and pathTo
       for (int x = 1; x < width(); x++) {
          for (int y = 0; y < height(); y++) {
+            int fromX = x - 1;
             int[] fromYs;
 
             if (y == 0)
@@ -181,12 +184,12 @@ public class SeamCarver {
 
             for (int i = 0; i < fromYs.length; i++) {
                int fromY = fromYs[i];
-               if (distTo[x][y] >= distTo[x - 1][fromY] + energy(x, y)) {
-                  distTo[x][y] = distTo[x - 1][fromY] + energy(x, y);
+               if (distTo[x][y] >= distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY)) {
+                  distTo[x][y] = distTo[fromX][fromY] + energy(x, y) + energy(fromX, fromY);
                   pathTo[x][y] = fromY;
                }
             }
-            assert pathTo[x][y] >= 0;
+            assert 0 <= pathTo[x][y] && pathTo[x][y] <= height() - 1;
             int diff = pathTo[x][y] - y;
             assert -1 <= diff && diff <= 1;
          }
@@ -220,7 +223,7 @@ public class SeamCarver {
       for (int x = width() - 1; x >= 0; x--) {
          seam[x] = seamY;
          if (x - 1 >= 0)
-            seamY = pathTo[x - 1][seamY];
+            seamY = pathTo[x][seamY];
       }
       // seam[1] = seam[2];
       seam[0] = seam[1];
@@ -295,18 +298,33 @@ public class SeamCarver {
       Picture p;
       SeamCarver s;
 
-      // p = new Picture(3, 2);
-      // p.set(0, 0, new Color(0, 0, 0));
-      // p.set(1, 0, new Color(0, 0, 0));
-      // p.set(2, 0, new Color(0, 0, 0));
-      // p.set(0, 1, new Color(255, 255, 255));
-      // p.set(1, 1, new Color(255, 255, 255));
-      // p.set(2, 1, new Color(255, 255, 255));
+      p = new Picture(5, 5);
+      for (int x = 0; x < 5; x++) {
+         for (int y = 0; y < 5; y++) {
+            if (x == 0 || x == 4 || y == 0 || y == 4) {
+               p.set(x, y, new Color(255, 255, 255));
+            } else {
+               p.set(x, y, new Color(0, 0, 0));
+            }
+         }
+      }
+      s = new SeamCarver(p);
 
-      // s = new SeamCarver(p);
-      // int[] horizontalSeam = s.findHorizontalSeam();
-      // assert horizontalSeam[0] <= 1 || horizontalSeam[0] >= 0;
-      // assert horizontalSeam[1] == 0 : String.format("horizontalSeam[%d] == %d != 0", 1, horizontalSeam[1]);
+      int[] verticalSeam = s.findVerticalSeam();
+      StdOut.println(Arrays.toString(verticalSeam));
+      assert 1 <= verticalSeam[0] && verticalSeam[0] <= 3;
+      assert verticalSeam[1] == 2 : String.format("verticalSeam[%d] == %d", 1, verticalSeam[1]) ;
+      assert verticalSeam[2] == 2;
+      assert verticalSeam[3] == 2;
+      assert 1 <= verticalSeam[4] && verticalSeam[4] <= 3;
+
+      int[] horizontalSeam = s.findHorizontalSeam();
+      StdOut.println(Arrays.toString(horizontalSeam));
+      assert 1 <= horizontalSeam[0] && horizontalSeam[0] <= 3;
+      assert horizontalSeam[1] == 2 : String.format("horizontalSeam[%d] == %d", 1, horizontalSeam[1]) ;
+      assert horizontalSeam[2] == 2;
+      assert horizontalSeam[3] == 2;
+      assert 1 <= horizontalSeam[4] && horizontalSeam[4] <= 3;
 
       p = new Picture("./input.png");
       s = new SeamCarver(p);
