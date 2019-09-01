@@ -314,12 +314,14 @@ public class SeamCarver {
 
             for (int i = 0; i < fromXs.length; i++) {
                int fromX = fromXs[i];
-               if (distTo[x][y] > distTo[fromX][y - 1] + energy(x, y)) {
-                  distTo[x][y] = distTo[fromX][y - 1];
+               if (distTo[x][y] >= distTo[fromX][y - 1] + energy(x, y)) {
+                  distTo[x][y] = distTo[fromX][y - 1] + energy(x, y);
                   pathTo[x][y] = fromX;
                }
             }
             assert pathTo[x][y] >= 0;
+            int diff = pathTo[x][y] - x;
+            assert -1 <= diff && diff <= 1;
          }
       }
 
@@ -347,9 +349,11 @@ public class SeamCarver {
       int seamX = minTopX;
       for (int y = height() - 1; y >= 0; y--) {
          seam[y] = seamX;
-         if (y - 1 >= 1)
-            seamX = pathTo[minTopX][y - 1];
+         if (y - 1 >= 0)
+            seamX = pathTo[seamX][y - 1];
       }
+      seam[1] = seam[2];
+      seam[0] = seam[1];
       validateSeam(seam, height(), width() - 1);
       return seam;
    }
@@ -389,7 +393,7 @@ public class SeamCarver {
          if (i + 1 < seam.length) {
             int diff = seam[i] - seam[i + 1];
             if (diff < -1 || diff > 1)
-               throw new IllegalArgumentException();
+               throw new IllegalArgumentException(String.format("seam[%d] - seam[%d] == %d", i, i + 1, diff));
          }
       }
       return true;
