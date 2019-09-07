@@ -3,13 +3,13 @@ import edu.princeton.cs.algs4.FlowNetwork;
 import edu.princeton.cs.algs4.FlowEdge;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.Queue;
 
 class BaseballElimination {
     private String[] teams;
     private int[] w, l, r;
     private int[][] g;
-    private int n, s, t, V;
+    private int n, s, t;
 
     public BaseballElimination(String filename) {
         // create a baseball division from given filename in format specified below
@@ -32,31 +32,6 @@ class BaseballElimination {
                 this.g[i][j] = in.readInt();
             }
         }
-
-        // Number of vertices = s and t + team vertices + game vertices
-        // .................. = 2 + n + C(2,n)
-        V = 2 + n + n * (n - 1) / 2;
-        s = V - 2;
-        t = V - 1;
-    }
-
-    private int gameVertice(int team1, int team2) {
-        // TODO BAD MATH
-        assert 0 <= team1 && team1 < team2 && team2 < n;
-        int result = n;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (team1 == i && team2 == j)
-                    return result;
-                result++;
-            }
-        }
-        return -1;
-    }
-
-    private int teamVertice(int team) {
-        assert 0 <= team && team < n;
-        return team;
     }
 
     public int numberOfTeams() {
@@ -66,10 +41,10 @@ class BaseballElimination {
 
     public Iterable<String> teams() {
         // all teams
-        SET<String> set = new SET<String>();
+        Queue<String> q = new Queue<String>();
         for (String team : teams)
-            set.add(team);
-        return set;
+            q.enqueue(team);
+        return q;
     }
 
     private int find(String team) {
@@ -103,78 +78,136 @@ class BaseballElimination {
         return g[find(team1)][find(team2)];
     }
 
-    public boolean isEliminated(String team) {
-        int x = find(team);
-        FlowNetwork network = new FlowNetwork(V);
-
-        for (int i = 0; i < n && i != x; i++) {
-            if (w[x] + r[x] < w[i]) {
-                return true;
-            }
-        }
-
+    private int maxFlow(int x) {
+        int maxFlow = 0;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
-                // connect vertice s to the game vertice
-                network.addEdge(new FlowEdge(s, gameVertice(i, j), g[i][j]));
-                // connect the game vertice to the team vertices
-                network.addEdge(new FlowEdge(gameVertice(i, j), teamVertice(i), Integer.MAX_VALUE));
-                network.addEdge(new FlowEdge(gameVertice(i, j), teamVertice(j), Integer.MAX_VALUE));
+                if (i == x || j == x)
+                    continue;
+                maxFlow += g[i][j];
+            }
+        }
+        return maxFlow;
+    }
+
+    private boolean isEqual(double a, double b) {
+        double diff = a - b;
+        return -0.001 < diff && diff < 0.001;
+    }
+
+    private Queue<Integer> trivialElimination(int x) {
+        Queue<Integer> q = new Queue<Integer>();
+        for (int i = 0; i < n; i++) {
+            if (i == x)
+                continue;
+
+            if (w[x] + r[x] < w[i]) {
+                q.enqueue(i);
+            }
+        }
+        return q;
+    }
+
+    private Queue<Integer> nontrivialElimination(int x) {
+        Queue<Integer> q = new Queue<Integer>();
+
+        int[][] gameVertices = new int[n][n];
+        int[] teamVertices = new int[n];
+
+        this.s = 0;
+        this.t = 1;
+        int V = 2;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                gameVertices[i][j] = -1;
+            }
+            teamVertices[i] = -1;
+        }
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (i == x || j == x)
+                    continue;
+                gameVertices[i][j] = V;
+                V++;
             }
         }
         for (int i = 0; i < n; i++) {
+            if (i == x)
+                continue;
+            teamVertices[i] = V;
+            V++;
+        }
+
+        FlowNetwork network = new FlowNetwork(V);
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (i == x || j == x)
+                    continue;
+                // connect vertice s to the game vertice
+                network.addEdge(new FlowEdge(s, gameVertices[i][j], g[i][j]));
+                // connect the game vertice to the team vertices
+                network.addEdge(new FlowEdge(gameVertices[i][j], teamVertices[i], Double.POSITIVE_INFINITY));
+                network.addEdge(new FlowEdge(gameVertices[i][j], teamVertices[j], Double.POSITIVE_INFINITY));
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (i == x)
+                continue;
             // connect the team vertices to t
-            network.addEdge(new FlowEdge(teamVertice(i), t, w[x] + r[x] - w[i]));
+            if (w[x] + r[x] - w[i] < 0)
+                continue;
+            network.addEdge(new FlowEdge(teamVertices[i], t, w[x] + r[x] - w[i]));
         }
 
         FordFulkerson ff = new FordFulkerson(network, s, t);
-        return !ff.inCut(t);
+        if (isEqual(ff.value(), maxFlow(x))) {
+            return q;
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (i == x)
+                continue;
+            if (ff.inCut(teamVertices[i])) {
+                q.enqueue(i);
+            }
+        }
+        assert q.size() > 0;
+        return q;
     }
 
-    // public Iterable<String> certificateOfElimination(String team) {
-    // // subset R of teams that eliminates given team; null if not eliminated
-    // if (team == null)
-    // throw new IllegalArgumentException();
-    // }
+    public boolean isEliminated(String team) {
+        int x = find(team);
+        return trivialElimination(x).size() > 0 || nontrivialElimination(x).size() > 0;
+    }
+
+    public Iterable<String> certificateOfElimination(String team) {
+        // subset R of teams that eliminates given team; null if not eliminated
+        int x = find(team);
+
+        Queue<String> q = new Queue<String>();
+        for (int i : trivialElimination(x))
+            q.enqueue(teams[i]);
+        if (q.size() > 0)
+            return q;
+        for (int i : nontrivialElimination(x))
+            q.enqueue(teams[i]);
+        if (q.size() > 0)
+            return q;
+        return null;
+    }
 
     public static void main(String[] args) {
         String filename = args[0];
         BaseballElimination division = new BaseballElimination(filename);
-        if (division.n == 4) {
-            assert division.teamVertice(0) == 0;
-            assert division.teamVertice(3) == 3;
-            assert division.gameVertice(0, 1) == 4;
-            assert division.gameVertice(0, 2) == 5;
-            assert division.gameVertice(0, 3) == 6;
-            assert division.gameVertice(1, 2) == 7;
-            assert division.gameVertice(1, 3) == 8;
-            assert division.gameVertice(2, 3) == 9;
-            assert division.s == 10;
-            assert division.t == 11;
-        }
-        if (division.n == 5) {
-            assert division.teamVertice(0) == 0;
-            assert division.teamVertice(4) == 4;
-            assert division.gameVertice(0, 1) == 5;
-            assert division.gameVertice(0, 2) == 6;
-            assert division.gameVertice(0, 3) == 7;
-            assert division.gameVertice(0, 4) == 8;
-            assert division.gameVertice(1, 2) == 9;
-            assert division.gameVertice(1, 3) == 10;
-            assert division.gameVertice(1, 4) == 11;
-            assert division.gameVertice(2, 3) == 12;
-            assert division.gameVertice(2, 4) == 13;
-            assert division.gameVertice(3, 4) == 14;
-            assert division.s == 15;
-            assert division.t == 16;
-        }
         for (String team : division.teams()) {
             if (division.isEliminated(team)) {
-                StdOut.print(team + " is eliminated by the subset R = { \n");
-                // for (String t : division.certificateOfElimination(team)) {
-                // StdOut.print(t + " ");
-                // }
-                // StdOut.println("}");
+                StdOut.print(team + " is eliminated by the subset R = { ");
+                for (String t : division.certificateOfElimination(team)) {
+                    StdOut.print(t + " ");
+                }
+                StdOut.println("}");
             } else {
                 StdOut.println(team + " is not eliminated");
             }
