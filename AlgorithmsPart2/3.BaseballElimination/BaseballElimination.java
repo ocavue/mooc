@@ -41,33 +41,47 @@ class BaseballElimination {
     public Iterable<String> teams() {
         // all teams
         SET<String> set = new SET<String>();
-        for (String team : teams) set.add(team);
+        for (String team : teams)
+            set.add(team);
         return set;
     }
 
-    // public int wins(String team) {
-    // // number of wins for given team
-    // if (team == null)
-    // throw new IllegalArgumentException();
-    // }
+    private int find(String team) {
+        for (int i = 0; i < teams.length; i++)
+            if (team.equals(teams[i]))
+                return i;
+        throw new IllegalArgumentException();
+    }
 
-    // public int losses(String team) {
-    // // number of losses for given team
-    // if (team == null)
-    // throw new IllegalArgumentException();
-    // }
+    public int wins(String team) {
+        // number of wins for given team
+        if (team == null)
+            throw new IllegalArgumentException();
+        return w[find(team)];
+    }
 
-    // public int remaining(String team) {
-    // // number of remaining games for given team
-    // if (team == null)
-    // throw new IllegalArgumentException();
-    // }
+    public int losses(String team) {
+        // number of losses for given team
+        if (team == null)
+            throw new IllegalArgumentException();
+        return l[find(team)];
+    }
 
-    // public int against(String team1, String team2) {
-    // // number of remaining games between team1 and team2
-    // if (team1 == null || team2 == null)
-    // throw new IllegalArgumentException();
-    // }
+    public int remaining(String team) {
+        // number of remaining games for given team
+        if (team == null)
+            throw new IllegalArgumentException();
+        return r[find(team)];
+    }
+
+    public int against(String team1, String team2) {
+        // number of remaining games between team1 and team2
+        if (team1 == null || team2 == null || team1.equals(team2))
+            throw new IllegalArgumentException();
+        int i1 = find(team1);
+        int i2 = find(team2);
+        return g[i1][i2];
+    }
 
     // public boolean isEliminated(String team) {
     // // is given team eliminated?
@@ -83,16 +97,16 @@ class BaseballElimination {
 
     public static void main(String[] args) {
         BaseballElimination division = new BaseballElimination(args[0]);
-        // for (String team : division.teams()) {
-        // if (division.isEliminated(team)) {
-        // StdOut.print(team + " is eliminated by the subset R = { ");
-        // for (String t : division.certificateOfElimination(team)) {
-        // StdOut.print(t + " ");
-        // }
-        // StdOut.println("}");
-        // } else {
-        // StdOut.println(team + " is not eliminated");
-        // }
-        // }
+        for (String team : division.teams()) {
+            // if (division.isEliminated(team)) {
+            // StdOut.print(team + " is eliminated by the subset R = { ");
+            // for (String t : division.certificateOfElimination(team)) {
+            // StdOut.print(t + " ");
+            // }
+            // StdOut.println("}");
+            // } else {
+            // StdOut.println(team + " is not eliminated");
+            // }
+        }
     }
 }
