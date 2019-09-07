@@ -2,9 +2,10 @@ import edu.princeton.cs.algs4.FordFulkerson;
 import edu.princeton.cs.algs4.FlowEdge;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.SET;
 
 class BaseballElimination {
-    private String[] names;
+    private String[] teams;
     private int[] w, l, r;
     private int[][] g;
 
@@ -15,33 +16,34 @@ class BaseballElimination {
 
         In in = new In(filename);
         int n = in.readInt();
-        this.names = new String[n];
+        this.teams = new String[n];
         this.w = new int[n];
         this.l = new int[n];
         this.r = new int[n];
         this.g = new int[n][n];
 
         for (int i = 0; i < n; i++) {
-            names[i] = in.readString();
+            teams[i] = in.readString();
             w[i] = in.readInt();
             l[i] = in.readInt();
             r[i] = in.readInt();
-            StdOut.println(w[i]);
-            StdOut.println(l[i]);
-            StdOut.println(r[i]);
             for (int j = 0; j < n; j++) {
                 this.g[i][j] = in.readInt();
             }
         }
     }
 
-    // public int numberOfTeams() {
-    // // number of teams
-    // }
+    public int numberOfTeams() {
+        // number of teams
+        return this.teams.length;
+    }
 
-    // public Iterable<String> teams() {
-    // // all teams
-    // }
+    public Iterable<String> teams() {
+        // all teams
+        SET<String> set = new SET<String>();
+        for (String team : teams) set.add(team);
+        return set;
+    }
 
     // public int wins(String team) {
     // // number of wins for given team
