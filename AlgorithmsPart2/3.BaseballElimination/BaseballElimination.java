@@ -9,7 +9,7 @@ class BaseballElimination {
     private String[] teams;
     private int[] w, l, r;
     private int[][] g;
-    private int n, s, t;
+    private int n;
 
     public BaseballElimination(String filename) {
         // create a baseball division from given filename in format specified below
@@ -114,8 +114,8 @@ class BaseballElimination {
         int[][] gameVertices = new int[n][n];
         int[] teamVertices = new int[n];
 
-        this.s = 0;
-        this.t = 1;
+        int s = 0;
+        int t = 1;
         int V = 2;
 
         for (int i = 0; i < n; i++) {
