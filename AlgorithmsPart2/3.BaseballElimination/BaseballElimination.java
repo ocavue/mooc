@@ -156,8 +156,7 @@ class BaseballElimination {
             if (i == x)
                 continue;
             // connect the team vertices to t
-            if (w[x] + r[x] - w[i] < 0)
-                continue;
+            assert w[x] + r[x] - w[i] >= 0;
             network.addEdge(new FlowEdge(teamVertices[i], t, w[x] + r[x] - w[i]));
         }
 
