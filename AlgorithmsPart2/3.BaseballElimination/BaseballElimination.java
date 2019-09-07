@@ -47,6 +47,8 @@ class BaseballElimination {
     }
 
     private int find(String team) {
+        if (team == null)
+            throw new IllegalArgumentException("team == null");
         for (int i = 0; i < teams.length; i++)
             if (team.equals(teams[i]))
                 return i;
@@ -55,29 +57,23 @@ class BaseballElimination {
 
     public int wins(String team) {
         // number of wins for given team
-        if (team == null)
-            throw new IllegalArgumentException();
         return w[find(team)];
     }
 
     public int losses(String team) {
         // number of losses for given team
-        if (team == null)
-            throw new IllegalArgumentException();
         return l[find(team)];
     }
 
     public int remaining(String team) {
         // number of remaining games for given team
-        if (team == null)
-            throw new IllegalArgumentException();
         return r[find(team)];
     }
 
     public int against(String team1, String team2) {
         // number of remaining games between team1 and team2
-        if (team1 == null || team2 == null || team1.equals(team2))
-            throw new IllegalArgumentException();
+        if (team1.equals(team2))
+            throw new IllegalArgumentException("team1.equals(team2)");
         return g[find(team1)][find(team2)];
     }
 
