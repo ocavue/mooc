@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Queue;
 
-class BaseballElimination {
+public class BaseballElimination {
     private String[] teams;
     private int[] w, l, r;
     private int[][] g;
@@ -118,12 +118,6 @@ class BaseballElimination {
         int t = 1;
         int V = 2;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                gameVertices[i][j] = -1;
-            }
-            teamVertices[i] = -1;
-        }
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 if (i == x || j == x)
