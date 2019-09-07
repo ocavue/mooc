@@ -73,8 +73,6 @@ public class BaseballElimination {
 
     public int against(String team1, String team2) {
         // number of remaining games between team1 and team2
-        if (team1.equals(team2))
-            throw new IllegalArgumentException("team1.equals(team2)");
         return g[find(team1)][find(team2)];
     }
 
