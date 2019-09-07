@@ -128,7 +128,7 @@ class BaseballElimination {
         }
 
         FordFulkerson ff = new FordFulkerson(network, s, t);
-        return ff.inCut(t);
+        return !ff.inCut(t);
     }
 
     // public Iterable<String> certificateOfElimination(String team) {
