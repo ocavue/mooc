@@ -78,9 +78,7 @@ class BaseballElimination {
         // number of remaining games between team1 and team2
         if (team1 == null || team2 == null || team1.equals(team2))
             throw new IllegalArgumentException();
-        int i1 = find(team1);
-        int i2 = find(team2);
-        return g[i1][i2];
+        return g[find(team1)][find(team2)];
     }
 
     // public boolean isEliminated(String team) {
