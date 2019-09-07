@@ -9,8 +9,7 @@ class BaseballElimination {
     private String[] teams;
     private int[] w, l, r;
     private int[][] g;
-    private int n, s, t;
-    private FlowNetwork network;
+    private int n, s, t, V;
 
     public BaseballElimination(String filename) {
         // create a baseball division from given filename in format specified below
@@ -36,17 +35,9 @@ class BaseballElimination {
 
         // Number of vertices = s and t + team vertices + game vertices
         // .................. = 2 + n + C(2,n)
-        int vertices = 2 + n + n * (n - 1) / 2;
-        s = vertices - 2;
-        t = vertices - 1;
-
-        this.network = new FlowNetwork(vertices);
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                // connect vertice s to the game vertice
-                // network.addEdge(s);
-            }
-        }
+        V = 2 + n + n * (n - 1) / 2;
+        s = V - 2;
+        t = V - 1;
     }
 
     private int gameVertice(int team1, int team2) {
@@ -112,11 +103,27 @@ class BaseballElimination {
         return g[find(team1)][find(team2)];
     }
 
-    // public boolean isEliminated(String team) {
-    // // is given team eliminated?
-    // if (team == null)
-    // throw new IllegalArgumentException();
-    // }
+    public boolean isEliminated(String team) {
+        int x = find(team);
+        FlowNetwork network = new FlowNetwork(V);
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                // connect vertice s to the game vertice
+                network.addEdge(new FlowEdge(s, gameVertice(i, j), g[i][j]));
+                // connect the game vertice to the team vertices
+                network.addEdge(new FlowEdge(gameVertice(i, j), teamVertice(i), Integer.MAX_VALUE));
+                network.addEdge(new FlowEdge(gameVertice(i, j), teamVertice(j), Integer.MAX_VALUE));
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            // connect the team vertices to t
+            network.addEdge(new FlowEdge(teamVertice(i), t, w[x] + r[x] - w[i]));
+        }
+
+        FordFulkerson ff = new FordFulkerson(network, s, t);
+        return ff.inCut(t);
+    }
 
     // public Iterable<String> certificateOfElimination(String team) {
     // // subset R of teams that eliminates given team; null if not eliminated
