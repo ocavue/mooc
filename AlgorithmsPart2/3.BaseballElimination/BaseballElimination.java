@@ -107,6 +107,12 @@ class BaseballElimination {
         int x = find(team);
         FlowNetwork network = new FlowNetwork(V);
 
+        for (int i = 0; i < n && i != x; i++) {
+            if (w[x] + r[x] < w[i]) {
+                return true;
+            }
+        }
+
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 // connect vertice s to the game vertice
@@ -163,15 +169,15 @@ class BaseballElimination {
             assert division.t == 16;
         }
         for (String team : division.teams()) {
-            // if (division.isEliminated(team)) {
-            // StdOut.print(team + " is eliminated by the subset R = { ");
-            // for (String t : division.certificateOfElimination(team)) {
-            // StdOut.print(t + " ");
-            // }
-            // StdOut.println("}");
-            // } else {
-            // StdOut.println(team + " is not eliminated");
-            // }
+            if (division.isEliminated(team)) {
+                // StdOut.print(team + " is eliminated by the subset R = { ");
+                // for (String t : division.certificateOfElimination(team)) {
+                // StdOut.print(t + " ");
+                // }
+                // StdOut.println("}");
+                // } else {
+                // StdOut.println(team + " is not eliminated");
+            }
         }
     }
 }
