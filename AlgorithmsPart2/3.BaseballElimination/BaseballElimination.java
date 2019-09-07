@@ -170,7 +170,7 @@ class BaseballElimination {
         }
         for (String team : division.teams()) {
             if (division.isEliminated(team)) {
-                StdOut.print(team + " is eliminated by the subset R = { ");
+                StdOut.print(team + " is eliminated by the subset R = { \n");
                 // for (String t : division.certificateOfElimination(team)) {
                 // StdOut.print(t + " ");
                 // }
