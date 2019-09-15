@@ -3,7 +3,8 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.TST;
 import edu.princeton.cs.algs4.TrieST;
 import edu.princeton.cs.algs4.SET;
-import edu.princeton.cs.algs4.StdRandom;;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Queue;
 
 public class BoggleSolver {
     // Initializes the data structure using the given array of strings as the
@@ -42,7 +43,7 @@ public class BoggleSolver {
         if (board == null)
             throw new IllegalArgumentException("board == null");
 
-        SET<String> words = new SET<String>();
+        Queue<String> words = new Queue<String>();
         boolean[][] marked = new boolean[board.rows()][board.cols()];
         for (int row = 0; row < board.rows(); row++) {
             for (int col = 0; col < board.cols(); col++) {
@@ -56,9 +57,9 @@ public class BoggleSolver {
     }
 
     // Use Depth First Search to find all word starts with prefix
-    private void dfs(String prefix, boolean[][] marked, int row, int col, BoggleBoard board, SET<String> words) {
+    private void dfs(String prefix, boolean[][] marked, int row, int col, BoggleBoard board, Queue<String> words) {
         if (isWord(prefix)) {
-            words.add(prefix);
+            words.enqueue(prefix);
         }
         if (!hasPrefix(prefix))
             return;
