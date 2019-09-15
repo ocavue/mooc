@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.TST;
 import edu.princeton.cs.algs4.TrieST;
 import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.StdRandom;;
 
 public class BoggleSolver {
     // Initializes the data structure using the given array of strings as the
