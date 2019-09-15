@@ -45,6 +45,7 @@ public class BoggleSolver {
         for (int row = 0; row < board.rows(); row++) {
             for (int col = 0; col < board.cols(); col++) {
                 char letter = board.getLetter(row, col);
+                StdOut.println("letter: " + letter);
                 boolean[][] marked = new boolean[board.rows()][board.cols()];
                 marked[row][col] = true;
                 dfs("" + letter, marked, row, col, board, words);
