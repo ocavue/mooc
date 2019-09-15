@@ -16,7 +16,7 @@ public class BoggleSolver {
     private TrieST26 dict;
 
     public class TrieST26 {
-        private static final int R = 256; // A-Z
+        private static final int R = 26; // A-Z
 
         private Node root; // root of trie
         private int n; // number of keys in trie
