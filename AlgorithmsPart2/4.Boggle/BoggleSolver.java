@@ -74,7 +74,8 @@ public class BoggleSolver {
     }
 
     private String pushLetter(String prefix, char letter) {
-        if (letter == 'Q')
+        char q = 'Q';
+        if (letter == q)
             return prefix + "QU";
         else
             return prefix + letter;
