@@ -44,11 +44,11 @@ public class BoggleSolver {
             throw new IllegalArgumentException("board == null");
 
         SET<String> words = new SET<String>();
+        boolean[][] marked = new boolean[board.rows()][board.cols()];
         for (int row = 0; row < board.rows(); row++) {
             for (int col = 0; col < board.cols(); col++) {
                 char letter = board.getLetter(row, col);
                 // StdOut.println("letter: " + letter);
-                boolean[][] marked = new boolean[board.rows()][board.cols()];
                 marked[row][col] = true;
                 dfs(pushLetter("", letter), marked, row, col, board, words);
                 marked[row][col] = false;
