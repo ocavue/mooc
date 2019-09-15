@@ -69,7 +69,7 @@ public class BoggleSolver {
                 return null;
             if (d == key.length())
                 return x;
-            char c = key.charAt(d);
+            int c = charAt(key, d);
             assert 65 <= c && c < 65 + 26;
             return get(x.next[c], key, d + 1);
         }
@@ -96,7 +96,7 @@ public class BoggleSolver {
                 x.val = val;
                 return x;
             }
-            char c = key.charAt(d);
+            int c = charAt(key, d);
             assert 65 <= c && c < 65 + 26;
             x.next[c] = put(x.next[c], key, val, d + 1);
             return x;
@@ -180,7 +180,7 @@ public class BoggleSolver {
                 results.enqueue(prefix.toString());
             if (d == pattern.length())
                 return;
-            char c = pattern.charAt(d);
+            int c = charAt(pattern, d);
             if (c == '.') {
                 for (char ch = 0; ch < R; ch++) {
                     prefix.append(ch);
@@ -224,7 +224,7 @@ public class BoggleSolver {
                 length = d;
             if (d == query.length())
                 return length;
-            char c = query.charAt(d);
+            int c = charAt(query, d);
             return longestPrefixOf(x.next[c], query, d + 1, length);
         }
 
