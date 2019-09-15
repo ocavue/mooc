@@ -66,7 +66,7 @@ public class BoggleSolver {
             for (int c = Math.max(0, col - 1); c <= Math.min(board.cols() - 1, col + 1); c++) {
                 if (marked[r][c])
                     continue;
-                char letter = board.getLetter(row, col);
+                char letter = board.getLetter(r, c);
                 dfs(pushLetter(prefix, letter), marked, r, c, board, words);
             }
         }
