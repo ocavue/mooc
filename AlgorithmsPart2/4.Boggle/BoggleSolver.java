@@ -76,8 +76,9 @@ public class BoggleSolver {
     private String pushLetter(String prefix, char letter) {
         StdOut.println("pushLetter: " + letter);
         char q = 'Q';
-        if (letter == q)
-            return prefix + "QU";
+        if (letter == q){
+            StdOut.println( letter == q);
+            return prefix + "QU";}
         else
             return prefix + letter;
     }
