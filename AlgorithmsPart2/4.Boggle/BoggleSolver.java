@@ -248,7 +248,7 @@ public class BoggleSolver {
                     n--;
                 x.val = null;
             } else {
-                char c = key.charAt(d);
+                int c = charAt(key, d);
                 x.next[c] = delete(x.next[c], key, d + 1);
             }
 
@@ -259,6 +259,10 @@ public class BoggleSolver {
                 if (x.next[c] != null)
                     return x;
             return null;
+        }
+
+        private int charAt(String str, int d) {
+            return str.charAt(d);
         }
 
     }
