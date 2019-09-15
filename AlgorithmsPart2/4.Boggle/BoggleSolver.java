@@ -70,7 +70,6 @@ public class BoggleSolver {
             if (d == key.length())
                 return x;
             int c = charAt(key, d);
-            assert 65 <= c && c < 65 + 26;
             return get(x.next[c], key, d + 1);
         }
 
@@ -97,7 +96,6 @@ public class BoggleSolver {
                 return x;
             }
             int c = charAt(key, d);
-            assert 65 <= c && c < 65 + 26;
             x.next[c] = put(x.next[c], key, val, d + 1);
             return x;
         }
@@ -262,7 +260,7 @@ public class BoggleSolver {
         }
 
         private int charAt(String str, int d) {
-            return str.charAt(d);
+            return str.charAt(d) - 65;
         }
 
     }
