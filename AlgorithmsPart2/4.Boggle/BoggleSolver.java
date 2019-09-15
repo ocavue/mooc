@@ -43,7 +43,7 @@ public class BoggleSolver {
         if (board == null)
             throw new IllegalArgumentException("board == null");
 
-        Queue<String> words = new Queue<String>();
+        SET<String> words = new SET<String>();
         for (int row = 0; row < board.rows(); row++) {
             for (int col = 0; col < board.cols(); col++) {
                 char letter = board.getLetter(row, col);
@@ -58,9 +58,9 @@ public class BoggleSolver {
     }
 
     // Use Depth First Search to find all word starts with prefix
-    private void dfs(String prefix, boolean[][] marked, int row, int col, BoggleBoard board, Queue<String> words) {
+    private void dfs(String prefix, boolean[][] marked, int row, int col, BoggleBoard board, SET<String> words) {
         if (isWord(prefix)) {
-            words.enqueue(prefix);
+            words.add(prefix);
         }
         if (!hasPrefix(prefix))
             return;
