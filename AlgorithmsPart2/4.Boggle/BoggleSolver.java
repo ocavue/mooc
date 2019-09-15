@@ -48,7 +48,7 @@ public class BoggleSolver {
                 // StdOut.println("letter: " + letter);
                 boolean[][] marked = new boolean[board.rows()][board.cols()];
                 marked[row][col] = true;
-                dfs("" + letter, marked, row, col, board, words);
+                dfs(pushLetter("", letter), marked, row, col, board, words);
             }
         }
         return words;
