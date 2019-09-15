@@ -87,7 +87,7 @@ public class BoggleSolver {
     }
 
     private boolean isWord(String str) {
-        return (str.length() < 3) && dict.contains(str);
+        return (str.length() >= 3) && dict.contains(str);
     }
 
     // Returns the score of the given word if it is in the dictionary, zero
