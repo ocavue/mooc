@@ -70,7 +70,7 @@ public class BoggleSolver {
             if (d == key.length())
                 return x;
             char c = key.charAt(d);
-            assert c < 256;
+            assert 65 <= c && c < 256;
             return get(x.next[c], key, d + 1);
         }
 
@@ -97,7 +97,7 @@ public class BoggleSolver {
                 return x;
             }
             char c = key.charAt(d);
-            assert c < 256;
+            assert 65 <= c && c < 256;
             x.next[c] = put(x.next[c], key, val, d + 1);
             return x;
         }
