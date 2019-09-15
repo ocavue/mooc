@@ -16,7 +16,9 @@ public class BoggleSolver {
         this.dict = new TST<Integer>();
 
         for (String word : dictionary) {
-            this.dict.put(word, points(word.length()));
+            if (word.length() >= 3) {
+                this.dict.put(word, points(word.length()));
+            }
         }
     }
 
@@ -59,8 +61,8 @@ public class BoggleSolver {
         if (!hasPrefix(prefix))
             return;
         marked[row][col] = true;
-        for (int r = Math.max(0, row - 1); r <= Math.max(board.rows(), row + 1); r++) {
-            for (int c = Math.max(0, row - 1); c <= Math.max(board.cols(), col + 1); c++) {
+        for (int r = Math.max(0, row - 1); r < Math.max(board.rows(), row + 1); r++) {
+            for (int c = Math.max(0, row - 1); c < Math.max(board.cols(), col + 1); c++) {
                 if (marked[r][c])
                     continue;
                 char letter = board.getLetter(row, col);

@@ -6,8 +6,7 @@ clear
 
 javac-algs4 -nowarn ./*.java
 
-# java-algs4 -ea BaseballElimination teams4.txt
-# java-algs4 -ea BaseballElimination teams5.txt
+java-algs4 BoggleSolver dictionary-algs4.txt board4x4.txt
 
 mkdir -p ./output
 time=$(date +%Y-%m-%d_%H-%M-%S)
