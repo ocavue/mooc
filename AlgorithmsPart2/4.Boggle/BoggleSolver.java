@@ -44,11 +44,11 @@ public class BoggleSolver {
             throw new IllegalArgumentException("board == null");
 
         Queue<String> words = new Queue<String>();
-        boolean[][] marked = new boolean[board.rows()][board.cols()];
         for (int row = 0; row < board.rows(); row++) {
             for (int col = 0; col < board.cols(); col++) {
                 char letter = board.getLetter(row, col);
                 // StdOut.println("letter: " + letter);
+                boolean[][] marked = new boolean[board.rows()][board.cols()];
                 marked[row][col] = true;
                 dfs(pushLetter("", letter), marked, row, col, board, words);
                 marked[row][col] = false;
@@ -79,10 +79,10 @@ public class BoggleSolver {
     private String pushLetter(String prefix, char letter) {
         // StdOut.println("pushLetter: " + letter);
         char q = 'Q';
-        if (letter == q){
+        if (letter == q) {
             // StdOut.println( letter == q);
-            return prefix + "QU";}
-        else
+            return prefix + "QU";
+        } else
             return prefix + letter;
     }
 
