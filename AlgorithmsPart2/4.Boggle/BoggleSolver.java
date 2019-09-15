@@ -83,12 +83,9 @@ public class BoggleSolver {
          * @throws IllegalArgumentException if {@code key} is {@code null}
          */
         public void put(String key, Integer val) {
-            if (key == null)
-                throw new IllegalArgumentException("first argument to put() is null");
-            if (val == null)
-                delete(key);
-            else
-                root = put(root, key, val, 0);
+            assert 65 <= val && val<= 65 + 26;
+
+            root = put(root, key, val, 0);
         }
 
         private Node put(Node x, String key, Integer val, int d) {
