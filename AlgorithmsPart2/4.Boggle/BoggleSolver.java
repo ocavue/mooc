@@ -70,6 +70,7 @@ public class BoggleSolver {
             if (d == key.length())
                 return x;
             char c = key.charAt(d);
+            assert c < 256;
             return get(x.next[c], key, d + 1);
         }
 
@@ -83,8 +84,6 @@ public class BoggleSolver {
          * @throws IllegalArgumentException if {@code key} is {@code null}
          */
         public void put(String key, Integer val) {
-            assert 65 <= val && val<= 65 + 26;
-
             root = put(root, key, val, 0);
         }
 
@@ -98,6 +97,7 @@ public class BoggleSolver {
                 return x;
             }
             char c = key.charAt(d);
+            assert c < 256;
             x.next[c] = put(x.next[c], key, val, d + 1);
             return x;
         }
