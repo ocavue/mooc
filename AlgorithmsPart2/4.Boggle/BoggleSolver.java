@@ -55,7 +55,6 @@ public class BoggleSolver {
 
     // Use Depth First Search to find all word starts with prefix
     private void dfs(String prefix, boolean[][] marked, int row, int col, BoggleBoard board, SET<String> words) {
-        // StdOut.println(String.format("dfs %d %d", row, col));
         if (isWord(prefix)) {
             words.add(prefix);
         }
@@ -88,7 +87,6 @@ public class BoggleSolver {
     }
 
     private boolean isWord(String str) {
-        StdOut.println(str);
         return (str.length() >= 3) && dict.contains(str);
     }
 
